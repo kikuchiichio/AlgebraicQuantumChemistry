@@ -12,7 +12,9 @@ For this reason, we choose GTO as the basic ingredient of the research. We prepa
 In this repository, we put our computer programs which enable us to pursue the following targets.
 
 (1) The analytical computation of atomic-orbital integrals by GTO
+
 (2) The algebraic method to solve polynomial equations by the Groebner basis technique
+
 (3) EXAMPLES of Un-restricted Hartree-Fock (UHF) or Restricted Hartree-Fock (RHF) computations.
 
 [KIKUCHI2013] @article{KIKUCHI2013, author="Kikuchi,Akihito", title="An approach to first principles electronic structure computation by symbolic-numeric computation", journal="QScience Connect",
@@ -20,9 +22,11 @@ volume="2013:14",year=2013, note="http://dx.doi.org/10.5339/connect.2013.14"}
 
 
 2022.9.14
+
 I put two programs  in the repository:
 
 PYUHF.py  (Python program, UHF computation of simple molecules)
+
 PYRHF.py  (Python program, RHF computation of simple molecules)
 
 These programs generate polynomil equations and write them in small sub-programs, which you should compute through the computer algebra package Singular. 
