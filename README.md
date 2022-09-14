@@ -21,10 +21,13 @@ volume="2013:14",year=2013, note="http://dx.doi.org/10.5339/connect.2013.14"}
 
 2022.9.14
 I put two programs  in the repository:
+
 PYUHF.py  (Python program, UHF computation of simple molecules)
 PYRHF.py  (Python program, RHF computation of simple molecules)
 
-These programs shall reveal to you the algebraic scheme to execute full computations of quantum chemistry.
+These programs generate polynomil equations and write them in small sub-programs, which you should compute through the computer algebra package Singular. 
+
+It is an initial simple lesson for beginners. Nevertheless, I expect that it shall reveal to you the algebraic scheme to execute full computations of quantum chemistry.
  
 
 
