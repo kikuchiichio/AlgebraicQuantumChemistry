@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[106]:
+#
+#  SUNDRY DEFINITIONS OF WORKING VARIABLES.
+#
+import networkx as nx
 
-
+IG=nx.DiGraph() 
 from sympy import symbols, Function,expand,sqrt
 import numpy as np
 import copy
@@ -49,7 +53,7 @@ v, w = symbols("v w")
 x, y = symbols("x y")
 
 
-# In[ ]:
+# In[109]:
 
 
 #
@@ -91,7 +95,6 @@ def getS(A,B,RAB2):
     PI=np.pi
     #print(A,B,RAB2)
     return (PI/(A+B))**1.5*sympy.exp(-A*B*RAB2/(A+B))
-
 
         
 def getT(A,B,RAB2):
@@ -203,41 +206,38 @@ def TN0000(N,a,b,c,d,RA,RB,RC,RD):
     RP=[(a*c1+b*c2)/(a+b) for c1,c2 in zip(RA,RB)]
     RQ=[(c*c1+d*c2)/(c+d) for c1,c2 in zip(RC,RD)]
     alpha=p*q/(p+q)
-    PI=np.p
+    PI=sympy.pi
     RPQ=[(c1-c2)**2 for c1,c2 in zip(RP,RQ)]
     RPQ2=sum(RPQ)
-    return 2*PI**(2.5)/p/q/np.sqrt(p+q)*KXYZAB(a,b,RA,RB)*KXYZAB(c,d,RC,RD)*BOYS(N,alpha*RPQ2)
+    return 2*PI**(2.5)/p/q/sympy.sqrt(p+q)*KXYZAB(a,b,RA,RB)*KXYZAB(c,d,RC,RD)*BOYS(N,alpha*RPQ2)
 
 
-# In[ ]:
+# In[110]:
 
 
+#
+#  TEST
+#
 AX,AY,AZ,BX,BY,BZ,CX,CY,CZ,DX,DY,DZ=symbols("AX AY AZ BX BY BZ CX CY CZ DX DY DZ")
 z1,z2,z3,z4=symbols("z1 z2 z3 z4")
-#z1,z2,z3,z4=[1,2,3,4]
 f=T0000(z1,z2,z3,z4,[AX,AY,AZ],[BX,BY,BZ],[CX,CY,CZ],[DX,DY,DZ])
 print(f)
 
 
-# In[ ]:
+# In[111]:
 
 
+#
+# TEST
+#
 ((S000000(z1,z2,[AX,AY,AZ],[BX,BY,BZ]).diff(AX)).diff(AX)).subs([(BX,AX),(BY,AY),(BZ,AZ)])
-
-
-# In[ ]:
-
-
-def CGAUSS(x,y,z,i,j,k,A,RA):
-    RAX,RAY,RAZ=RA
-    R2=(x-RAX)**2+(y-RAY)**2+(z-RAZ)**2
-    return (x-RAX)**i*(y-RAY)**j*(z-RAZ)**k*sympy.exp(-A*R2) 
 
 
 # #
 # # PERFORMANCE TEST CONCERNING DIFFERENTIATION (TO GENERATE TWO-ELECTRON INTERGRALS OF P-ORBITALS)
 # #
-# import time
+# #
+# import time,random
 # ALL=[]
 # for va in [AX,AY,AZ]:
 #     for vb in [BX,BY,BZ]:
@@ -262,88 +262,119 @@ def CGAUSS(x,y,z,i,j,k,A,RA):
 #                 print("time=",end-start)
 #                 ALL.append([f0,f1,f2,f3,f4])
 
-# In[ ]:
+# In[112]:
 
 
-x,y,z=symbols("x y z")
-RAX,RAY,RAX=symbols("RAX RAY RAZ")
-alpha=symbols("alpha")
-f=2+CGAUSS(x,y,z,1,1,1,alpha,[RAX,RAY,RAX])
 
-
-# In[ ]:
-
-
-expand(f).as_ordered_terms()
-
-
-# In[ ]:
-
-
-def NLIST(N):
-    if N==0:
-        return ["UNDEF" for _ in range(4)]
-    else:
-        return [NLIST(N-1) for _ in range(4)]
-
-A=NLIST(4)
 from sympy import Function, Symbol
 TN=Function("TN0000")
 UNDEF=Function("UNDEF")
 
-
-# In[ ]:
-
-
-def TREEINDEX(i1,i2,i3):
-    N=3
-    return i1+N*i2+N*N*i3
-
-def TWELVEINDEX(i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
-    M=3*3*3
-    ti=TREEINDEX(i1,i2,i3)
-    tj=TREEINDEX(j1,j2,j3)
-    tk=TREEINDEX(k1,k2,k3)
-    tl=TREEINDEX(l1,l2,l3)
-    return ti+M*tj+M*M*tk+M*M*M*tl
-
-
-# In[ ]:
-
-
-INTEGRALALL=dict()
-for i in range(11):
-    INTEGRALALL[(i,0,0,0,0,0,0,0,0,0,0,0,0)]=TN(i)
-
-
-# In[ ]:
-
-
-i=0
-while(i<5):
-    print(i)
-    i+=1
+from sympy import Number
+class FMA(Function):
+    """
+    FMA(x, y, z) = x*y + z
+    """
+    @classmethod
+    def eval(cls, x, y, z):
+        # Number is the base class of Integer, Rational, and Float
+        if all(isinstance(i, Number) for i in [x, y, z]):
+           return x*y + z
+    def doit(self, deep=True, **hints):
+        x, y, z = self.args
+        # Recursively call doit() on the args whenever deep=True.
+        # Be sure to pass deep=True and **hints through here.
+        if deep:
+            x = x.doit(deep=deep, **hints)
+            y = y.doit(deep=deep, **hints)
+            z = z.doit(deep=deep, **hints)
+        return x*y + z
+    
+    
 
 
 # # Obara-Saika Scheme for Two-electron integrals
 
-# In[ ]:
+# In[113]:
 
 
+#
+# We prepare dummy expressions for THE FUNCTIONS TN0000(N,a,b,c,d,RA,RB,RC,RD): TNS[0],TNS[1],...., WHICH SHALL BE USED LATER
+#  THEY ARE AUXILLARY INTEGRALS, AND IF N=0 , THEY ARE THE TWO-ELECTRON INTGRALS.
+#
+
+TNSTRING=''
+for i in range(11):
+    TNSTRING+= 'TN'+str(i)+' '
+TNS=symbols(TNSTRING)
+def TN(N):
+    return TNS[N]
+
+
+# In[114]:
+
+
+#
+#  INITIALIZATION OF OBARA-SAIKA
+#
+#INTEGRALALL=dict()
+#for i in range(11):
+#    INTEGRALALL[(i,0,0,0,0,0,0,0,0,0,0,0,0)]=TN(i)
+    
+IG=nx.DiGraph() 
+
+
+# In[115]:
+
+
+#
+#  EACH NUCLEI IS STATIONED IN THE 3D CARTESIAN SPACE:r=(x,y,z)
+#  THE COORDINATES ARE REPRESENTED AS RA=(XA,YA,ZB)
+#  THE DIFFERENCE ARE REPRESENTED BY XPA=XP-XA, YPQ=YP-YQ, ZAB=ZA-AB, AND SO ON.
+#
+#  WE START FROM SPHERICAL GAUSSIAN FUNCTIONS : (a,RA)=exp(-a|r-RA|^2),exp(-b|r-RB|^2),exp(-c|r-RC|^2),exp(-d|r-rB|^2).
+#
+#
+#
 XPA, XPQ, XCD, XAB=symbols("XPA XPQ XCD XAB")
 YPA, YPQ,YCD, YAB=symbols("YPA YPQ YCD YAB")
 ZPA, ZPQ, ZCD, ZAB=symbols("ZPA ZPQ ZCD ZAB")
-
-alpha=symbols("alpha")
+#
+#
+#  [(a,RA;r1),(b,Rb;r1)| 1/|r1-r2| | (c,Rd);r2,(d,RD;r2)] 
+#
+#
+#  We put p=a*b/(a+b);q=c*d/(c+d); alpha=p*q/(p+q).
+#  Provisionally p,q are left as they are without substitution.
+#  At the end of the computation, we have to replace them.
+#
+a,b,c,d=symbols("a b c d")
 p,q=symbols("p q")
-b,d=symbols("b d")
+alpha=symbols("alpha")
 
 #
-# VERTICAL
-#  (N: i+1 0 0 0 ) <- (N: i 0 0 0) , (N+1 i 0 0 0) , (N i-1 0 0 0) (N+1 i 0 0 0)
+#  We compute the integrals using general Cartesian Gaussian functions:
+#   (x-XA)^i (y-YA)^j (z-ZA)^j exp(-a|r-RA|^2)
 #
+#  VIZ.
+#   [(i1,j1,k1,a,RA),(i2,j2,k2,b,RB)|1/|r1-r2||(i3,j3,k3,d,RC),(i4,j4,k4,d,RD)]
+#
+#  For brevity, we write:
+#   i=(i1,i2,i3), j=(j1,j2,j3), k=(k1,k2,k3),
+# 
+#  To compute the auxillary integdals T(N,i,j,k,l) we lift from T(N,i=0.j=0,k=0,z=0)
+#  WHEN N=0 THEY GIVE THE TWO-ELECTRON INTEGRALS; OBARA-SAIKA RECURSION USES THEM WITH N>=1.
+#
+#  BY VERTICAL RECUSION IN OBARA-SAIKA, WE COMPUTE 
+#  (N: i+1 0 0 0 ) from (N: i 0 0 0) , (N+1 i 0 0 0) , (N i-1 0 0 0), (N+1 i 0 0 0)
+#
+#  WHERE i+1 is the every possible move from (i1,i2,i3) by adding one or zero to each of (i1,i2,i3), 
+#  except zero-move. 
+#
+#  THE FOLLOWING FUNCTION LIFTS UP IN D=X/Y/Z DIRECTIONS AND COMPUTES THE INTGRALS.
 
 def VERTICAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
+    alpha=p*q/(p+q)
     
     if D=="X":
         assert (j1==j2==j3==k1==k2==k3==l1==l2==l3==0),print(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,"X")
@@ -381,19 +412,20 @@ def VERTICAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
         #print(keyn)
         DPA=ZPA
         DPQ=ZPQ
-    if None!=INTEGRALALL.get(keyn):
+    if None!=integrals_all.get(keyn):
         return
     
-    data0=INTEGRALALL.get(key0)
-    data1=INTEGRALALL.get(key1)
-    data2=INTEGRALALL.get(key2)
-    data3=INTEGRALALL.get(key3)
+    data0=integrals_all.get(key0)
+    data1=integrals_all.get(key1)
+    data2=integrals_all.get(key2)
+    data3=integrals_all.get(key3)
+    nx.add_star(IG, [keyn,key0, key1, key2, key3])
     if min(list(key2))<0:
         data2=0
-        INTEGRALALL[key2]=0
+        integrals_all[key2]=0
     if min(list(key3))<0:
         data3=0
-        INTEGRALALL[key3]=0
+        integrals_all[key3]=0
     if data0==None:
         requested_keys[key0]=key0
     if data1==None:
@@ -405,7 +437,7 @@ def VERTICAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
     if data0!=None and data1!=None and data2!=None and data3!=None:
         if (INFO==1):
             print(keyn,"WRITTEN")
-        INTEGRALALL[keyn]= DPA*data0-alpha/p*DPQ*data1+i_d/2/p*(data2-alpha/p*data3)
+        integrals_all[keyn]= DPA*data0-alpha/p*DPQ*data1+i_d/2/p*(data2-alpha/p*data3)
     else:
         if (INFO==1):
             print(keyn,"NOT WRITTEN")
@@ -423,9 +455,9 @@ requested_keys=dict()
 #
 #  The dictionary of computed integrals
 #
-INTEGRALALL=dict()
+integrals_all=dict()
 for i in range(11):
-    INTEGRALALL[(i,0,0,0,0,0,0,0,0,0,0,0,0)]=TN(i)        
+    integrals_all[(i,0,0,0,0,0,0,0,0,0,0,0,0)]=TN(i)        
 
     
 #
@@ -468,7 +500,6 @@ while (sizeI!=sizeE):
     j1=j2=j3=k1=k2=k3=l1=l2=l3=0
     i1=0
     i2=i3=1
-
     for N in range(6):
         VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
     j1=j2=j3=k1=k2=k3=l1=l2=l3=0
@@ -484,58 +515,54 @@ while (sizeI!=sizeE):
 
 
     sizeI=len(requested_keys.keys())
-    for keyr in INTEGRALALL.keys():
+    for keyr in integrals_all.keys():
         getV=requested_keys.get(keyr)
         if getV!=None:
             requested_keys.pop(keyr)
     sizeE=len(requested_keys.keys())
-    print("LOOP:",LOOP)
+    
+    print("LOOP:",LOOP,sizeI,sizeE)
     LOOP+=1
 
 
-# In[ ]:
+# In[116]:
 
+
+for a in integrals_all.keys():
+    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=a
+    if N==0 and min(list(a))>=0:
+        print(a)
+
+
+# In[117]:
+
+
+#
+#  THERE ARE KEYS REQUESTED TO COMPUTE INTEGRALS. BECAUSE THEY WERE NOT PREPARED IN ADVANCE.
+#
 
 print(len(requested_keys.keys()))
-for keyr in INTEGRALALL.keys():
+for keyr in integrals_all.keys():
     getV=requested_keys.get(keyr)
     if getV!=None:
         requested_keys.pop(keyr)
 print(len(requested_keys.keys()))
-
-
-# In[ ]:
-
-
 for kr in requested_keys.keys():
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr)
     if i1<=2 and i2<=2 and i3<=2:
         print(kr)
 
 
-# In[ ]:
-
-
-klist=[]
-for keys,data in zip(INTEGRALALL.keys(),INTEGRALALL.values()):
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(keys)
-    if N==3 and min(list(keys))>=0 and sum(list(keys))-N==2:
-        klist.append(keys)
-        print(keys)
-            
-for keys,data in zip(INTEGRALALL.keys(),INTEGRALALL.values()):
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(keys)            
-    if N==1 and min(list(keys))>=0:
-        klist.append(keys)
-        #print(keys)
-
-
-# In[ ]:
+# In[118]:
 
 
 #
+#  NEXT WE DO HORIZONTAL RECUSIONS.
+#
 # HORIZONRAL
 # (N; i 0 k+1 0) <= (N; i 0 k 0), (N; i-1 0 k 0), (N; i, 0, k-1, 0), (N; i+1 0 k 0)
+#
+#  SIMILARLY WE USE THE FUNCTION WHICH MAKES THE HORIZONTAL SHIFT ALONG X/Y/Z DIRECTIONS
 #
 
 def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
@@ -569,22 +596,23 @@ def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
         #print(D,keyn)
         DAB=ZAB
         DCD=ZCD
-    data0=INTEGRALALL.get(key0)
-    data1=INTEGRALALL.get(key1)
-    data2=INTEGRALALL.get(key2)
-    data3=INTEGRALALL.get(key3)
+    data0=integrals_all.get(key0)
+    data1=integrals_all.get(key1)
+    data2=integrals_all.get(key2)
+    data3=integrals_all.get(key3)
+    nx.add_star(IG, [keyn,key0, key1, key2, key3])
     if min(list(key0))<0:
         data0=0
-        INTEGRALALL[key0]=0
+        integrals_all[key0]=0
     if min(list(key1))<0:
         data1=0
-        INTEGRALALL[key1]=0
+        integrals_all[key1]=0
     if min(list(key2))<0:
         data2=0
-        INTEGRALALL[key2]=0
+        integrals_all[key2]=0
     if min(list(key3))<0:
         data3=0
-        INTEGRALALL[key3]=0
+        integrals_all[key3]=0
  
     if data0==None:
         requested_keys[key0]=key0
@@ -595,17 +623,17 @@ def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
     if data3==None:
         requested_keys[key3]=key3
     #if data0==None:
-    #    INTEGRALALL[key0]="REQUIRED"
+    #    integrals_all[key0]="REQUIRED"
     #if data1==None:
-    #    INTEGRALALL[key1]="REQUIRED"
+    #    integrals_all[key1]="REQUIRED"
     #if data2==None:
-    #    INTEGRALALL[key2]="REQUIRED"
+    #    integrals_all[key2]="REQUIRED"
     #if data3==None:
-    #    INTEGRALALL[key3]="REQUIRED"
+    #    integrals_all[key3]="REQUIRED"
     if data0!=None and data1!=None and data2!=None and data3!=None:
         #print(data0,data1,data2,data3)
         #print(b,d,DAB,DCD,i1,k1,p,q)
-        INTEGRALALL[keyn]= -(b*DAB+d*DCD)/q*data0 -i_d/2/q*data1 +k_d/2/q*data2 -p/q*data3
+        integrals_all[keyn]= -(b*DAB+d*DCD)/q*data0 -i_d/2/q*data1 +k_d/2/q*data2 -p/q*data3
     #else:
         #print(keyn,"NOT WRITTEN")
         #print(key0,key1,key2,"key3=",key3)
@@ -637,9 +665,13 @@ while (sizeI!=sizeE):
                 k1,k2,k3=k123
                 HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
                 HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-                HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)    
+                HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        removable=dict()
+        for a in requested_keys.keys():
+            if integrals_all.get(a)!=None:
+                removable[a]=a
         sizeI=len(requested_keys.keys())
-        for keyr in INTEGRALALL.keys():
+        for keyr in integrals_all.keys():
             getV=requested_keys.get(keyr)
             if getV!=None:
                 requested_keys.pop(keyr)
@@ -648,17 +680,31 @@ while (sizeI!=sizeE):
         LOOP+=1
 
 
-# In[ ]:
+# In[119]:
 
 
+for a in requested_keys.keys():
+    if integrals_all.get(a)==None:
+        print(a,"None")
+    else:
+        print(a)
+
+
+# In[120]:
+
+
+#
+#  CHECK THE REQUESTED KEYS. IF WE MISS SOMETHING IN THE NEEDED RANGE, WE TRY TO COMPUTE THEM BY "HORIZONTAL AGAIN".
+#  IF THERE IS NO OUTPUT HERE, WE HAVE GATHERED ALL REQUIRED INTEGRALS.
+#
 keyslist=[kr for kr in requested_keys.keys()]
 
 for kr in keyslist:
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
-    if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=1:
-        print(kr)
+    if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=2:
+        #print(kr)
         N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
-        INTEGRALALL.get(kr)
+        integrals_all.get(kr)
         #HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
         #HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
         #HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
@@ -667,34 +713,17 @@ for kr in keyslist:
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
     if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=2:
         N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
-        INTEGRALALL.get(kr)
+        integrals_all.get(kr)
         HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
         HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
         HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
 
 
-# In[ ]:
+# In[122]:
 
 
 print(len(requested_keys.keys()))
-for keyr in INTEGRALALL.keys():
-    getV=requested_keys.get(keyr)
-    if getV!=None:
-        requested_keys.pop(keyr)
-print(len(requested_keys.keys()))
-keyslist=[kr for kr in requested_keys.keys()]
-for kr in keyslist:
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
-    if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=2 and min([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])>=0:
-        print(kr)
-        N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
-
-
-# In[ ]:
-
-
-print(len(requested_keys.keys()))
-for keyr in INTEGRALALL.keys():
+for keyr in integrals_all.keys():
     getV=requested_keys.get(keyr)
     if getV!=None:
         requested_keys.pop(keyr)
@@ -707,127 +736,39 @@ for kr in keyslist:
         N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
 
 
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=(0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0)
-HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-#HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-#HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-
-
-# In[ ]:
-
-
-print(len(requested_keys.keys()))
-for keyr in INTEGRALALL.keys():
-    getV=requested_keys.get(keyr)
-    if getV!=None:
-        requested_keys.pop(keyr)
-print(len(requested_keys.keys()))
-keyslist=[kr for kr in requested_keys.keys()]
-for kr in keyslist:
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
-    if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=1 and min([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])>=0:
-        print(kr)
-        N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
-
-
-# In[ ]:
-
-
-def pt(i):
-    if i==(1,0,0):
-        return "x"
-    if i==(0,1,0):
-        return "y"
-    if i==(0,0,1):
-        return "z"
-    if i==(0,0,0):
-        return "s"
-    return ""
-
-
-# In[ ]:
+# In[75]:
 
 
 requested_keys_save=copy.deepcopy(requested_keys)
 
 
-# In[ ]:
+# In[77]:
 
 
 #
-# TRANSFER 
+#  WE TRANSFER THE INTEGRALS TO COVER THE BLANK DATA.
+#
+# TRANSFER 1 and 2: THESE FUNCTION COMPUTES
 #  (N; i j+1 k l ) <= (N;i+1 j k l), (N; i j k l)
 #  (N; i j k l+1 ) <= (N;j k+1 l), (N; i j k l)
 #
+#  MAYBE SOMETING NECESSARY ARE STILL MISSING; IF WE DETECT THEM, WE TRY TO COMPUTE THEM BY "HORIZONTAL" ON THE FLY!
+#
 def try_to_compute(kr):
-    print("try to compute:",kr)
+    print(">>>TRY TO COMPUTE AT",kr)
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
     HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
     HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
     HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
-    if INTEGRALALL.get(kr)!=None:
+    if integrals_all.get(kr)!=None:
+        print(">>>>SUCCESS!")
         return 1
     else:
+        print(">>>>FAIL!")
         return 0
 
-def TRANSFER(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
+    
+def TRANSFER1(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
     if D=="X":
         key0=(N,i1+1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
         key1=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
@@ -844,8 +785,9 @@ def TRANSFER(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
         keyn=(N,i1,i2,i3,j1,j2,j3+1,k1,k2,k3,l1,l2,l3)
         DAB=ZAB
         
-    data0=INTEGRALALL.get(key0)
-    data1=INTEGRALALL.get(key1)
+    data0=integrals_all.get(key0)
+    data1=integrals_all.get(key1)
+    nx.add_star(IG, [keyn,key0, key1])
     if data0==None:
         requested_keys[key0]=key0
     if data1==None:
@@ -853,17 +795,18 @@ def TRANSFER(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
     if data0!=None and data1!=None:
         #print(key1,"TRANSFERED",keyn)
         #print(data0,data1,data2,data3)
-        INTEGRALALL[keyn]= data0+DAB*data1
+        integrals_all[keyn]= data0+DAB*data1
         return 0
     else:
-        print(key1,"TRANSFER",keyn)
-        print("FAILS ...key0=",key0)
+        print("TRANSFER(", key1,"->",keyn, ") \n   !FAILS AT KEY0=",key0)
         return key0
+    
+def TRANSFER2(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
     if D=="X":
         key0=(N,i1,i2,i3,j1,j2,j3,k1+1,k2,k3,l1,l2,l3)
         key1=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
         keyn=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1+1,l2,l3)
-        DCD=ZCD
+        DCD=XCD
     if D=="Y":
         key0=(N,i1,i2,i3,j1,j2,j3,k1,k2+1,k3,l1,l2,l3)
         key1=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
@@ -874,20 +817,20 @@ def TRANSFER(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
         key1=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
         keyn=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3+1)
         DCD=ZCD
-    data0=INTEGRALALL.get(key0)
-    data1=INTEGRALALL.get(key1)
+    data0=integrals_all.get(key0)
+    data1=integrals_all.get(key1)
+    nx.add_star(IG, [keyn,key0, key1])
     if data0==None:
         requested_keys[key0]=key0
     if data1==None:
         requested_keys[key1]=key1
     if data0!=None and data1!=None:
         #print(key1,"TRANSFERED",keyn)
-        #print(data0,data1,data2,data3)
-        INTEGRALALL[keyn]= data0+DCD*data1
+        #print(data0,data1)
+        integrals_all[keyn]= data0+DCD*data1
         return 0
     else:
-        print(key1,"TRANSFER",keyn)
-        print("FAILS ...key0=",key0)
+        print("TRANSFER(", key1,"->",keyn, "\n    FAILS AT KEY0=",key0)
         return key0
 
 requested_keys=dict()
@@ -898,24 +841,52 @@ while (sizeI!=sizeE):
         ijkl_iter=list(product(range(2), repeat=12))
         for ijkl in ijkl_iter:
             i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,i3=ijkl
-            if (i1+i2+i3)<=1 and (j1+j2+j3)<=1 and (k1+k2+k3)<=1 and (l1+l2+l3)<=1:
-                V=TRANSFER("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+            if (i1+i2+i3)<=2 and (j1+j2+j3)<=2 and (k1+k2+k3)<=2 and (l1+l2+l3)<=2:
+                V=TRANSFER1("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                if V!=0: #V is a key to a missing integral
+                    W=try_to_compute(V)
+                    if W==1:
+                        V=TRANSFER1("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)   
+                V=TRANSFER1("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
                 if V!=0:
                     W=try_to_compute(V)
                     if W==1:
-                        V=TRANSFER("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)   
-                V=TRANSFER("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                        V=TRANSFER1("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3) 
+                V=TRANSFER1("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
                 if V!=0:
                     W=try_to_compute(V)
                     if W==1:
-                        V=TRANSFER("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3) 
-                V=TRANSFER("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-                if V!=0:
-                    W=try_to_compute(V)
-                    if W==1:
-                        V=TRANSFER("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3) 
+                        V=TRANSFER1("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3) 
         sizeI=len(requested_keys.keys())
-        for keyr in INTEGRALALL.keys():
+        for keyr in integrals_all.keys():
+            getV=requested_keys.get(keyr)
+            if getV!=None:
+                requested_keys.pop(keyr)
+        sizeE=len(requested_keys.keys())
+        print(sizeI,sizeE)
+        
+    for N in range(1):
+        ijkl_iter=list(product(range(2), repeat=12))
+        for ijkl in ijkl_iter:
+            i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,i3=ijkl
+            if (i1+i2+i3)<=2 and (j1+j2+j3)<=2 and (k1+k2+k3)<=2 and (l1+l2+l3)<=2:
+                V=TRANSFER2("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                if V!=0:
+                    W=try_to_compute(V)
+                    if W==1:
+                        V=TRANSFER2("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)   
+                V=TRANSFER2("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                if V!=0:
+                    W=try_to_compute(V)
+                    if W==1:
+                        V=TRANSFER2("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3) 
+                V=TRANSFER2("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                if V!=0:
+                    W=try_to_compute(V)
+                    if W==1:
+                        V=TRANSFER2("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3) 
+        sizeI=len(requested_keys.keys())
+        for keyr in integrals_all.keys():
             getV=requested_keys.get(keyr)
             if getV!=None:
                 requested_keys.pop(keyr)
@@ -923,12 +894,18 @@ while (sizeI!=sizeE):
         print(sizeI,sizeE)
 
 
-# # We have "transferred" the two-electron integrals, but there are still missing ones...
-# ## Could we retrieve them using the symmetric property of the integrals?
-# ## [AB|CD]=[BA|CD]=[AB|DC]=[BA|CD] and so and on...
-# 
-
 # In[ ]:
+
+
+# We have "transferred" the two-electron integrals: Are them complete? Are tere no missing one?
+#
+# If something is missing,
+# we might retrieve it using the symmetric property of the integrals:
+# [AB|CD]=[BA|CD]=[AB|DC]=[BA|CD] and so and on...
+#
+
+
+# In[79]:
 
 
 def interchanged(kr):
@@ -964,28 +941,120 @@ def interchanged(kr):
 #            break
     
 itr_ijkl=list(product(range(2), repeat=12))
+index=1
+INTERCHANGED=0
+ptlost=[]
 for ijkl in itr_ijkl:
     pt=tuple([0]+list(ijkl))
     N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3=pt
-    if (ii1+ii2+ii3)<=1 and (ij1+ij2+ij3)<=1 and (ik1+ik2+ik3)<=1 and (il1+il2+il3)<=1:
-        print("Checks ", pt)
+    if (ii1+ii2+ii3)<=2 and (ij1+ij2+ij3)<=2 and (ik1+ik2+ik3)<=2 and (il1+il2+il3)<=2:
+        print("Checks ", pt[0],pt[1:],pt)
         F=0
         for ptn in interchanged(pt):
             N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
-            getW=INTEGRALALL.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
+            getW=integrals_all.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
             if getW!=None:
-                print(pt,"INDEX INTERCHANGED, AND FOUND" ,ptn)
+                print(index,pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
+                if pt!=ptn:
+                    INTERCHANGED+=1
+                    #ptlost.append(pt)
                 F=1
+                index+=1
                 break
         if F==0:
             print("\n\nMissing!\n\n")
+            ptlost.append(pt)
             
-              
+#
+#  IF THERE IS NO MESSAGE <MISSING!> AND THE <INTERCHANGED BELOW> IS ZERO, WE HAVE COMPLETED THE LIST OF INTEGRALS.
+#
+print(INTERCHANGED)            
               
 
 
 # In[ ]:
 
 
+for a in IG.in_edges((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)):
+    print(a)
 
+
+# In[80]:
+
+
+#
+#  IN THE FOLLOWING, THE INTEGRALS OF S- AND P- SHELLS ARE ASSEMBLED, AS formulas.
+#
+itr_ijkl=list(product(range(2), repeat=12))
+index=1
+formulas=[]
+for ijkl in itr_ijkl:
+    pt=tuple([0]+list(ijkl))
+    N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3=pt
+    if (ii1+ii2+ii3)<=1 and (ij1+ij2+ij3)<=1 and (ik1+ik2+ik3)<=1 and (il1+il2+il3)<=1:
+        print("Checks ", pt[0],pt[1:],pt)
+        F=0
+        for ptn in interchanged(pt):
+            N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
+            getW=integrals_all.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
+            formulas.append(getW)
+            if getW!=None:
+                print(index,pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
+                if pt!=ptn:
+                    INTERCHANGED+=1
+                    #ptlost.append(pt)
+                F=1
+                index+=1
+                break
+        if F==0:
+            print("\n\nMissing!\n\n")
+            ptlost.append(pt)
+print(INTERCHANGED)         
+
+
+# In[ ]:
+
+
+#
+#  WE PROVISIONALLY WRITE THE AUXILLARY INTEGRALS TN(N,i=0,j=0,k=0) BY TNS[N] for N=0,.....
+#
+#  WE SHOULD REPLACE THEM WITH PROPER ANALYTIC FORMULAS.
+# 
+
+
+# In[ ]:
+
+
+AX,AY,AZ,BX,BY,BZ,CX,CY,CZ,DX,DY,DZ=symbols("AX AY AZ BX BY BZ CX CY CZ DX DY DZ")
+z1,z2,z3,z4=symbols("z1 z2 z3 z4")
+#z1,z2,z3,z4=[1,2,3,4]
+f0=TN0000(1,z1,z2,z3,z4,[AX,AY,AZ],[BX,BY,BZ],[CX,CY,CZ],[DX,DY,DZ])
+f1=TN0000(1,z1,z2,z3,z4,[AX,AY,AZ],[BX,BY,BZ],[CX,CY,CZ],[DX,DY,DZ])
+
+
+# In[ ]:
+
+
+formulas[1]
+
+
+# In[ ]:
+
+
+
+import matplotlib.pyplot as plt
+import networkx as nx
+get_ipython().run_line_magic('matplotlib', 'inline')
+G = nx.DiGraph()
+nx.add_path(G, [3, 5, 4, 1, 0, 2, 7, 8, 9, 6])
+nx.add_path(G, [3, 0, 6, 4, 2, 7, 1, 9, 8, 5])
+
+nx.draw_networkx(IG)
+plt.show()
+
+
+# In[ ]:
+
+
+formulas[1].subs([(TNS[0],f0),(TNS[1],f1)])
 
