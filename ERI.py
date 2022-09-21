@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[106]:
+# In[133]:
+
+
+#!/usr/bin/env python
+# coding: utf-8
+
 #
 #  SUNDRY DEFINITIONS OF WORKING VARIABLES.
 #
@@ -51,9 +56,6 @@ R=symbols("R",positive=True)
 #
 v, w = symbols("v w")
 x, y = symbols("x y")
-
-
-# In[109]:
 
 
 #
@@ -212,9 +214,6 @@ def TN0000(N,a,b,c,d,RA,RB,RC,RD):
     return 2*PI**(2.5)/p/q/sympy.sqrt(p+q)*KXYZAB(a,b,RA,RB)*KXYZAB(c,d,RC,RD)*BOYS(N,alpha*RPQ2)
 
 
-# In[110]:
-
-
 #
 #  TEST
 #
@@ -222,9 +221,6 @@ AX,AY,AZ,BX,BY,BZ,CX,CY,CZ,DX,DY,DZ=symbols("AX AY AZ BX BY BZ CX CY CZ DX DY DZ
 z1,z2,z3,z4=symbols("z1 z2 z3 z4")
 f=T0000(z1,z2,z3,z4,[AX,AY,AZ],[BX,BY,BZ],[CX,CY,CZ],[DX,DY,DZ])
 print(f)
-
-
-# In[111]:
 
 
 #
@@ -262,7 +258,6 @@ print(f)
 #                 print("time=",end-start)
 #                 ALL.append([f0,f1,f2,f3,f4])
 
-# In[112]:
 
 
 
@@ -295,7 +290,6 @@ class FMA(Function):
 
 # # Obara-Saika Scheme for Two-electron integrals
 
-# In[113]:
 
 
 #
@@ -311,7 +305,6 @@ def TN(N):
     return TNS[N]
 
 
-# In[114]:
 
 
 #
@@ -324,7 +317,6 @@ def TN(N):
 IG=nx.DiGraph() 
 
 
-# In[115]:
 
 
 #
@@ -470,6 +462,7 @@ for i in range(11):
 #  We try to compute the requested integrals in a succesive repetition.
 #  if sizeI == sizeE, the computation is satulated and we termintate it
 #
+print("VERTICAL")
 sizeI=0
 sizeE=1
 LOOP=0
@@ -525,18 +518,13 @@ while (sizeI!=sizeE):
     LOOP+=1
 
 
-# In[116]:
 
 
-for a in integrals_all.keys():
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=a
-    if N==0 and min(list(a))>=0:
-        print(a)
 
-
-# In[117]:
-
-
+#for a in integrals_all.keys():
+#    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=a
+#    if N==0 and min(list(a))>=0:
+#        print(a)
 #
 #  THERE ARE KEYS REQUESTED TO COMPUTE INTEGRALS. BECAUSE THEY WERE NOT PREPARED IN ADVANCE.
 #
@@ -547,14 +535,10 @@ for keyr in integrals_all.keys():
     if getV!=None:
         requested_keys.pop(keyr)
 print(len(requested_keys.keys()))
-for kr in requested_keys.keys():
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr)
-    if i1<=2 and i2<=2 and i3<=2:
-        print(kr)
-
-
-# In[118]:
-
+#for kr in requested_keys.keys():
+#    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr)
+#    if i1<=2 and i2<=2 and i3<=2:
+#        print(kr)
 
 #
 #  NEXT WE DO HORIZONTAL RECUSIONS.
@@ -565,7 +549,7 @@ for kr in requested_keys.keys():
 #  SIMILARLY WE USE THE FUNCTION WHICH MAKES THE HORIZONTAL SHIFT ALONG X/Y/Z DIRECTIONS
 #
 
-def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
+def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
     if D=="X":
         key0=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
         key1=(N,i1-1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
@@ -601,6 +585,7 @@ def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
     data2=integrals_all.get(key2)
     data3=integrals_all.get(key3)
     nx.add_star(IG, [keyn,key0, key1, key2, key3])
+
     if min(list(key0))<0:
         data0=0
         integrals_all[key0]=0
@@ -630,6 +615,13 @@ def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
     #    integrals_all[key2]="REQUIRED"
     #if data3==None:
     #    integrals_all[key3]="REQUIRED"
+    if min(list(key0))<0 and min(list(key1))<0 and min(list(key2))<0 and min(list(key3))<0:
+        #
+        # Maybe in this case, the formula cannot be applied.
+        #
+        if (INFO==1):
+            print(key0,key1,key2,key3,D)
+        return
     if data0!=None and data1!=None and data2!=None and data3!=None:
         #print(data0,data1,data2,data3)
         #print(b,d,DAB,DCD,i1,k1,p,q)
@@ -652,6 +644,7 @@ sizeE=1
 #  We try to compute the requested integrals in a succesive repetition.
 #  if sizeI == sizeE, the computation is satulated and we termintate it
 #
+print("HORIZONTAL")
 LOOP=0
 while (sizeI!=sizeE):
     for N in range(1):
@@ -680,17 +673,17 @@ while (sizeI!=sizeE):
         LOOP+=1
 
 
-# In[119]:
 
 
-for a in requested_keys.keys():
-    if integrals_all.get(a)==None:
-        print(a,"None")
-    else:
-        print(a)
+
+#for a in requested_keys.keys():
+#    if integrals_all.get(a)==None:
+#        print(a,"None")
+#    else:
+#        print(a)
 
 
-# In[120]:
+
 
 
 #
@@ -714,12 +707,11 @@ for kr in keyslist:
     if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=2:
         N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
         integrals_all.get(kr)
-        HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-        HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-        HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
+#        HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
+#        HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
+#        HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
 
 
-# In[122]:
 
 
 print(len(requested_keys.keys()))
@@ -729,20 +721,19 @@ for keyr in integrals_all.keys():
         requested_keys.pop(keyr)
 print(len(requested_keys.keys()))
 keyslist=[kr for kr in requested_keys.keys()]
-for kr in keyslist:
-    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
-    if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=1 and min([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])>=0:
-        print(kr)
-        N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
+#for kr in keyslist:
+#    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
+#    if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=1 and min([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])>=0:
+#        print(kr)
+#        N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
 
 
-# In[75]:
+
 
 
 requested_keys_save=copy.deepcopy(requested_keys)
 
 
-# In[77]:
 
 
 #
@@ -752,23 +743,27 @@ requested_keys_save=copy.deepcopy(requested_keys)
 #  (N; i j+1 k l ) <= (N;i+1 j k l), (N; i j k l)
 #  (N; i j k l+1 ) <= (N;j k+1 l), (N; i j k l)
 #
-#  MAYBE SOMETING NECESSARY ARE STILL MISSING; IF WE DETECT THEM, WE TRY TO COMPUTE THEM BY "HORIZONTAL" ON THE FLY!
+#  MAYBE SOMETHING NECESSARY ARE STILL MISSING; 
+#  IF WE DETECT THEM, WE TRY TO COMPUTE THEM BY "HORIZONTAL" ON THE FLY!
 #
-def try_to_compute(kr):
-    print(">>>TRY TO COMPUTE AT",kr)
+def try_to_compute(kr,INFO=0):
+    if INFO==1:
+        print(">>>TRY TO COMPUTE AT",kr)
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
     HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
     HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
     HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
     if integrals_all.get(kr)!=None:
-        print(">>>>SUCCESS!")
+        if INFO==1:
+            print(">>>>SUCCESS!")
         return 1
     else:
-        print(">>>>FAIL!")
+        if INFO==1:
+            print(">>>>FAIL!")
         return 0
 
     
-def TRANSFER1(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
+def TRANSFER1(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
     if D=="X":
         key0=(N,i1+1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
         key1=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
@@ -798,10 +793,11 @@ def TRANSFER1(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
         integrals_all[keyn]= data0+DAB*data1
         return 0
     else:
-        print("TRANSFER(", key1,"->",keyn, ") \n   !FAILS AT KEY0=",key0)
+        if (INFO==1):
+            print("TRANSFER(", key1,"->",keyn, ") \n   !FAILS AT KEY0=",key0)
         return key0
     
-def TRANSFER2(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
+def TRANSFER2(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
     if D=="X":
         key0=(N,i1,i2,i3,j1,j2,j3,k1+1,k2,k3,l1,l2,l3)
         key1=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
@@ -830,18 +826,22 @@ def TRANSFER2(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3):
         integrals_all[keyn]= data0+DCD*data1
         return 0
     else:
-        print("TRANSFER(", key1,"->",keyn, "\n    FAILS AT KEY0=",key0)
+        if (INFO==1):
+            print("TRANSFER(", key1,"->",keyn, "\n    FAILS AT KEY0=",key0)
         return key0
-
+print("TRANSFER1 & 2")
 requested_keys=dict()
 sizeI=0
 sizeE=1
+counter=0
+print(len(requested_keys.keys()))
 while (sizeI!=sizeE):
     for N in range(1):
-        ijkl_iter=list(product(range(2), repeat=12))
+        ijkl_iter=list(product(range(3), repeat=12))
         for ijkl in ijkl_iter:
             i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,i3=ijkl
             if (i1+i2+i3)<=2 and (j1+j2+j3)<=2 and (k1+k2+k3)<=2 and (l1+l2+l3)<=2:
+                counter+=1
                 V=TRANSFER1("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
                 if V!=0: #V is a key to a missing integral
                     W=try_to_compute(V)
@@ -863,10 +863,10 @@ while (sizeI!=sizeE):
             if getV!=None:
                 requested_keys.pop(keyr)
         sizeE=len(requested_keys.keys())
-        print(sizeI,sizeE)
+        #print(sizeI,sizeE)
         
     for N in range(1):
-        ijkl_iter=list(product(range(2), repeat=12))
+        ijkl_iter=list(product(range(3), repeat=12))
         for ijkl in ijkl_iter:
             i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,i3=ijkl
             if (i1+i2+i3)<=2 and (j1+j2+j3)<=2 and (k1+k2+k3)<=2 and (l1+l2+l3)<=2:
@@ -894,6 +894,13 @@ while (sizeI!=sizeE):
         print(sizeI,sizeE)
 
 
+
+# In[134]:
+
+
+counter
+
+
 # In[ ]:
 
 
@@ -905,7 +912,7 @@ while (sizeI!=sizeE):
 #
 
 
-# In[79]:
+
 
 
 def interchanged(kr):
@@ -947,114 +954,127 @@ ptlost=[]
 for ijkl in itr_ijkl:
     pt=tuple([0]+list(ijkl))
     N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3=pt
-    if (ii1+ii2+ii3)<=2 and (ij1+ij2+ij3)<=2 and (ik1+ik2+ik3)<=2 and (il1+il2+il3)<=2:
-        print("Checks ", pt[0],pt[1:],pt)
+
+    if (ii1+ii2+ii3)<=1 and (ij1+ij2+ij3)<=1 and (ik1+ik2+ik3)<=1 and (il1+il2+il3)<=1:
+        #print(pt)
+        #print(N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3)
+        #print("Checks ", pt[0],pt[1:],pt,type(pt))
         F=0
-        for ptn in interchanged(pt):
-            N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
-            getW=integrals_all.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
-            if getW!=None:
-                print(index,pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
-                if pt!=ptn:
-                    INTERCHANGED+=1
-                    #ptlost.append(pt)
-                F=1
-                index+=1
-                break
+        #print(type((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)))
+        getV=integrals_all.get((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3))
+        #print((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3),getV)
+        if getV!=None:
+            F=1
+            print(index,pt,"FOUND",getV)
+            index+=1
+        #for ptn in interchanged(pt):
+        #    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
+        #    #print(ptn,type(ptn),(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)==ptn)
+        #    getW=integrals_all.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
+        #    if getW!=None and getV==None:
+        #        print(index,pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
+        #        print(getW)
+        #        if pt!=ptn:
+        #            INTERCHANGED+=1
+        #            #ptlost.append(pt)
+        #        F=1
+        #        index+=1
+        #        break
         if F==0:
-            print("\n\nMissing!\n\n")
+            print("\n\n",pt,"Missing!\n\n")
             ptlost.append(pt)
             
 #
 #  IF THERE IS NO MESSAGE <MISSING!> AND THE <INTERCHANGED BELOW> IS ZERO, WE HAVE COMPLETED THE LIST OF INTEGRALS.
 #
 print(INTERCHANGED)            
-              
+print(ptlost)              
 
 
 # In[ ]:
 
 
-for a in IG.in_edges((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)):
-    print(a)
+# In[136]:
 
 
-# In[80]:
+for ky in integrals_all.keys():
+    if (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) ==ky:
+        print(ky)
+        
+integrals_all.get((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
 
 
-#
-#  IN THE FOLLOWING, THE INTEGRALS OF S- AND P- SHELLS ARE ASSEMBLED, AS formulas.
-#
+# In[141]:
+
+
 itr_ijkl=list(product(range(2), repeat=12))
-index=1
-formulas=[]
 for ijkl in itr_ijkl:
     pt=tuple([0]+list(ijkl))
     N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3=pt
-    if (ii1+ii2+ii3)<=1 and (ij1+ij2+ij3)<=1 and (ik1+ik2+ik3)<=1 and (il1+il2+il3)<=1:
-        print("Checks ", pt[0],pt[1:],pt)
-        F=0
-        for ptn in interchanged(pt):
-            N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
-            getW=integrals_all.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
-            formulas.append(getW)
-            if getW!=None:
-                print(index,pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
-                if pt!=ptn:
-                    INTERCHANGED+=1
-                    #ptlost.append(pt)
-                F=1
-                index+=1
-                break
-        if F==0:
-            print("\n\nMissing!\n\n")
+    if (ii1+ii2+ii3)==1 and (ij1+ij2+ij3)==1 and (ik1+ik2+ik3)==1 and (il1+il2+il3)==1:
+        print(pt,integrals_all.get((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3)))
+
+
+# In[142]:
+
+
+def try_to_compute2(kr):
+    print(">>>TRY TO COMPUTE AT",kr)
+    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
+    if j1-1>=0:
+        TRANSFER1("X",N,i1,i2,i3,j1-1,j2,j3,k1,k2,k3,l1,l2,l3)
+    if j2-1>=0:
+        TRANSFER1("Y",N,i1,i2,i3,j1,j2-1,j3,k1,k2,k3,l1,l2,l3)
+    if j3-1>=0:
+        TRANSFER1("Z",N,i1,i2,i3,j1,j2,j3-1,k1,k2,k3,l1,l2,l3)
+    if l1-1>=0:
+        TRANSFER2("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1-1,l2,l3)
+    if l2-1>=0:
+        TRANSFER2("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2-1,l3)
+    if l3-1>=0:
+        TRANSFER2("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3-1)
+    if integrals_all.get(kr)!=None:
+        print(">>>>SUCCESS!")
+        return 1
+    else:
+        print(">>>>FAIL!")
+        return 0
+for x in ptlost:
+    print(x)
+    try_to_compute2(x)
+    
+ptlost=[]
+itr_ijkl=list(product(range(2), repeat=12))
+for ijkl in itr_ijkl:
+    pt=tuple([0]+list(ijkl))
+    N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3=pt
+    if (ii1+ii2+ii3)==1 and (ij1+ij2+ij3)==1 and (ik1+ik2+ik3)==1 and (il1+il2+il3)==1:
+        getV=integrals_all.get((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3))
+        if getV==None:
             ptlost.append(pt)
-print(INTERCHANGED)         
+        
 
 
-# In[ ]:
+# In[143]:
 
 
-#
-#  WE PROVISIONALLY WRITE THE AUXILLARY INTEGRALS TN(N,i=0,j=0,k=0) BY TNS[N] for N=0,.....
-#
-#  WE SHOULD REPLACE THEM WITH PROPER ANALYTIC FORMULAS.
-# 
+for x in ptlost:
+    print(x)
+    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=pt
+    pt1=N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3
+    pt2=N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3
 
 
-# In[ ]:
+# In[144]:
 
 
-AX,AY,AZ,BX,BY,BZ,CX,CY,CZ,DX,DY,DZ=symbols("AX AY AZ BX BY BZ CX CY CZ DX DY DZ")
-z1,z2,z3,z4=symbols("z1 z2 z3 z4")
-#z1,z2,z3,z4=[1,2,3,4]
-f0=TN0000(1,z1,z2,z3,z4,[AX,AY,AZ],[BX,BY,BZ],[CX,CY,CZ],[DX,DY,DZ])
-f1=TN0000(1,z1,z2,z3,z4,[AX,AY,AZ],[BX,BY,BZ],[CX,CY,CZ],[DX,DY,DZ])
-
-
-# In[ ]:
-
-
-formulas[1]
-
-
-# In[ ]:
-
-
-
-import matplotlib.pyplot as plt
-import networkx as nx
-get_ipython().run_line_magic('matplotlib', 'inline')
-G = nx.DiGraph()
-nx.add_path(G, [3, 5, 4, 1, 0, 2, 7, 8, 9, 6])
-nx.add_path(G, [3, 0, 6, 4, 2, 7, 1, 9, 8, 5])
-
-nx.draw_networkx(IG)
-plt.show()
-
-
-# In[ ]:
-
-
-formulas[1].subs([(TNS[0],f0),(TNS[1],f1)])
+REQUIRED=[]
+for y in ptlost:
+    for x in IG.out_edges(y):
+        getV=integrals_all.get(x[1])
+        print(x[1],getV)
+        if getV==None:
+            REQUIRED.append(x[1])
+print(REQUIRED)
+    
 
