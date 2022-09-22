@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[133]:
+# In[ ]:
 
 
 #!/usr/bin/env python
@@ -72,7 +72,7 @@ def F0(ARG):
 #
 # BOYS F0 FUNCTIOM
 #
-    PI = np.pi
+    PI = sympy.pi
     if  type(ARG)==float and ARG < 1.0e-6:
         return 1 -ARG/3.
     if  type(ARG)==sympy.core.numbers.Zero and ARG < 1.0e-6:
@@ -141,7 +141,7 @@ def BOYS(N,X):
         Z=Symbol("Z")
         f=F0(Z)
         for _ in range(N):
-            f=f.diff(Z)
+            f=f.diff(Z)*(-1)
         return f.subs(Z,X)
     
 def KXYZAB(a,b,RA,RB):
@@ -331,6 +331,7 @@ IG=nx.DiGraph()
 XPA, XPQ, XCD, XAB=symbols("XPA XPQ XCD XAB")
 YPA, YPQ,YCD, YAB=symbols("YPA YPQ YCD YAB")
 ZPA, ZPQ, ZCD, ZAB=symbols("ZPA ZPQ ZCD ZAB")
+XQC, YQC, ZQC=symbols("XQC YQC ZQC")
 #
 #
 #  [(a,RA;r1),(b,Rb;r1)| 1/|r1-r2| | (c,Rd);r2,(d,RD;r2)] 
@@ -411,6 +412,8 @@ def VERTICAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
     data1=integrals_all.get(key1)
     data2=integrals_all.get(key2)
     data3=integrals_all.get(key3)
+    #print(key0,key1,key2,key3)
+    #print(data0,data1,data2,data3)
     nx.add_star(IG, [keyn,key0, key1, key2, key3])
     if min(list(key2))<0:
         data2=0
@@ -419,13 +422,18 @@ def VERTICAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
         data3=0
         integrals_all[key3]=0
     if data0==None:
+        #print("data 0 requested")
         requested_keys[key0]=key0
     if data1==None:
+        #print("data 1 requested")
         requested_keys[key1]=key1
     if data2==None:
+        #print("data 2 requested")
         requested_keys[key2]=key2
     if data3==None:
+        #print("data 3 requested")
         requested_keys[key3]=key3
+    #print(requested_keys.keys())
     if data0!=None and data1!=None and data2!=None and data3!=None:
         if (INFO==1):
             print(keyn,"WRITTEN")
@@ -451,7 +459,11 @@ integrals_all=dict()
 for i in range(11):
     integrals_all[(i,0,0,0,0,0,0,0,0,0,0,0,0)]=TN(i)        
 
-    
+
+# In[ ]:
+
+
+
 #
 #  sizeI : size of "requested_keys" BEFORE VERTICAL RECURSION 
 #  sizeE : size of "requested_keys" AFTER  VERTICAL RECURSION
@@ -467,58 +479,64 @@ sizeI=0
 sizeE=1
 LOOP=0
 while (sizeI!=sizeE):
-    for N in range(6):
-        for i1 in range(4):
-            for i2 in range(4):
-                for i3 in range(4):
-                    #print(i1,i2,i3)
-                    j1=j2=j3=k1=k2=k3=l1=l2=l3=0
-                    VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-                    j2=j3=k1=k2=k3=l1=l2=l3=0
-                    VERTICAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-                    j2=j3=k1=k2=k3=l1=l2=l3=0
-                    VERTICAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+for N in range(6):
+    for i1 in range(4):
+        for i2 in range(4):
+            for i3 in range(4):
+                #print(i1,i2,i3)
+                j1=j2=j3=k1=k2=k3=l1=l2=l3=0
+                VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                j2=j3=k1=k2=k3=l1=l2=l3=0
+                VERTICAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+                j2=j3=k1=k2=k3=l1=l2=l3=0
+                VERTICAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
 
-    #for N in range(6):
-    #    for i1 in range(4):
-    #        for i2 in range(4):
-    #            for i3 in range(4):
-    #                #print(i1,i2,i3)
-    #                j1=j2=j3=k1=k2=k3=l1=l2=l3=0
-    #                VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-    #                j2=j3=k1=k2=k3=l1=l2=l3=0
-    #                VERTICAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-    #                j2=j3=k1=k2=k3=l1=l2=l3=0
-    #                VERTICAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-    j1=j2=j3=k1=k2=k3=l1=l2=l3=0
-    i1=0
-    i2=i3=1
-    for N in range(6):
-        VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-    j1=j2=j3=k1=k2=k3=l1=l2=l3=0
-    i2=0
-    i1=i3=1
-    for N in range(6):
-        VERTICAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-    j1=j2=j3=k1=k2=k3=l1=l2=l3=0
-    i3=0
-    i1=i2=1
-    for N in range(6):
-        VERTICAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-
-
-    sizeI=len(requested_keys.keys())
-    for keyr in integrals_all.keys():
-        getV=requested_keys.get(keyr)
-        if getV!=None:
-            requested_keys.pop(keyr)
-    sizeE=len(requested_keys.keys())
-    
-    print("LOOP:",LOOP,sizeI,sizeE)
-    LOOP+=1
+#for N in range(6):
+#    for i1 in range(4):
+#        for i2 in range(4):
+#            for i3 in range(4):
+#                #print(i1,i2,i3)
+#                j1=j2=j3=k1=k2=k3=l1=l2=l3=0
+#                VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+#                j2=j3=k1=k2=k3=l1=l2=l3=0
+#                VERTICAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+#                j2=j3=k1=k2=k3=l1=l2=l3=0
+#                VERTICAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+j1=j2=j3=k1=k2=k3=l1=l2=l3=0
+i1=0
+i2=i3=1
+for N in range(6):
+    VERTICAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+j1=j2=j3=k1=k2=k3=l1=l2=l3=0
+i2=0
+i1=i3=1
+for N in range(6):
+    VERTICAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+j1=j2=j3=k1=k2=k3=l1=l2=l3=0
+i3=0
+i1=i2=1
+for N in range(6):
+    VERTICAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
 
 
+sizeI=len(requested_keys.keys())
+for keyr in integrals_all.keys():
+    getV=requested_keys.get(keyr)
+    if getV!=None:
+        requested_keys.pop(keyr)
+sizeE=len(requested_keys.keys())
 
+print("LOOP:",LOOP,sizeI,sizeE)
+LOOP+=1
+
+
+# In[ ]:
+
+
+integrals_all.get((0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+
+
+# In[ ]:
 
 
 #for a in integrals_all.keys():
@@ -625,12 +643,107 @@ def HORIZONTAL(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
     if data0!=None and data1!=None and data2!=None and data3!=None:
         #print(data0,data1,data2,data3)
         #print(b,d,DAB,DCD,i1,k1,p,q)
-        integrals_all[keyn]= -(b*DAB+d*DCD)/q*data0 -i_d/2/q*data1 +k_d/2/q*data2 -p/q*data3
+        integrals_all[keyn]= -(b*DAB+d*DCD)/q*data0 + i_d/2/q*data1 +k_d/2/q*data2 -p/q*data3
     #else:
         #print(keyn,"NOT WRITTEN")
         #print(key0,key1,key2,"key3=",key3)
         #print(data0,data1,data2,data3)
         
+def HORIZONTAL0(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
+    if D=="X":
+        key0=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key1=(N+1,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key2=(N+1,i1-1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key3=(N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
+        key4=(N+1,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
+        keyn=(N,i1,i2,i3,j1,j2,j3,k1+1,k2,k3,l1,l2,l3)
+        i_d,k_d=i1,k1
+        DQC=XQC
+        DPQ=XPQ
+    if D=="Y":
+        key0=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key1=(N+1,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key2=(N+1,i1,i2-1,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key3=(N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
+        key4=(N+1,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
+        keyn=(N,i1,i2,i3,j1,j2,j3,k1,k2+1,k3,l1,l2,l3)
+        i_d,k_d=i2,k2
+        DQC=YQC
+        DPQ=YPQ
+        #print(D,keyn)
+    if D=="Z":
+        key0=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key1=(N+1,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key2=(N+1,i1,i2,i3-1,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        key3=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
+        key4=(N+1,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
+        keyn=(N,i1,i2,i3,j1,j2,j3,k1,k2,k3+1,l1,l2,l3)
+        i_d,k_d=i3,k3
+        #print(D,keyn)
+        DQC=ZQC
+        DPQ=ZPQ
+    data0=integrals_all.get(key0)
+    data1=integrals_all.get(key1)
+    data2=integrals_all.get(key2)
+    data3=integrals_all.get(key3)
+    data4=integrals_all.get(key4)
+    nx.add_star(IG, [keyn,key0, key1, key2, key3, key4])
+
+    if min(list(key0))<0:
+        data0=0
+        integrals_all[key0]=0
+    if min(list(key1))<0:
+        data1=0
+        integrals_all[key1]=0
+    if min(list(key2))<0:
+        data2=0
+        integrals_all[key2]=0
+    if min(list(key3))<0:
+        data3=0
+        integrals_all[key3]=0
+    if min(list(key4))<0:
+        data4=0
+        integrals_all[key4]=0
+    if data0==None:
+        requested_keys[key0]=key0
+    if data1==None:
+        requested_keys[key1]=key1
+    if data2==None:
+        requested_keys[key2]=key2
+    if data3==None:
+        requested_keys[key3]=key3
+    if data4==None:
+        requested_keys[key4]=key4
+    #if data0==None:
+    #    integrals_all[key0]="REQUIRED"
+    #if data1==None:
+    #    integrals_all[key1]="REQUIRED"
+    #if data2==None:
+    #    integrals_all[key2]="REQUIRED"
+    #if data3==None:
+    #    integrals_all[key3]="REQUIRED"
+    if min(list(key0))<0 and min(list(key1))<0 and min(list(key2))<0 and min(list(key3))<0 and min(list(key4))<0:
+        #
+        # Maybe in this case, the formula cannot be applied.
+        #
+        if (INFO==1):
+            print(key0,key1,key2,key3,key4,D)
+        return
+    if data0!=None and data1!=None and data2!=None and data3!=None and data4!=None:
+        #print(data0,data1,data2,data3)
+        #print(b,d,DAB,DCD,i1,k1,p,q)
+        integrals_all[keyn]= DQC*data0+alpha/q*data1+i_d/2/(p+q)*data2        +k_d/2/q*(data3-alpha/q*data4)
+    #else:
+        #print(keyn,"NOT WRITTEN")
+        #print(key0,key1,key2,"key3=",key3)
+        #print(data0,data1,data2,data3)
+        
+
+
+# In[ ]:
+
+
+
 requested_keys=dict()
 sizeI=0
 sizeE=1
@@ -647,30 +760,30 @@ sizeE=1
 print("HORIZONTAL")
 LOOP=0
 while (sizeI!=sizeE):
-    for N in range(1):
-        j1=j2=j3=k1=k2=k3=l1=l2=l3=0
-        itr_i123=list(product(range(3), repeat=3))
-        itr_k123=list(product(range(3), repeat=3))
-        for i123 in itr_i123:
-            j1=j2=j3=l1=l2=l3=0
-            i1,i2,i3=i123
-            for k123 in itr_k123:
-                k1,k2,k3=k123
-                HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-                HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-                HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
-        removable=dict()
-        for a in requested_keys.keys():
-            if integrals_all.get(a)!=None:
-                removable[a]=a
-        sizeI=len(requested_keys.keys())
-        for keyr in integrals_all.keys():
-            getV=requested_keys.get(keyr)
-            if getV!=None:
-                requested_keys.pop(keyr)
-        sizeE=len(requested_keys.keys())
-        print(LOOP,sizeI,sizeE)
-        LOOP+=1
+    for N in range(5):
+j1=j2=j3=k1=k2=k3=l1=l2=l3=0
+itr_i123=list(product(range(3), repeat=3))
+itr_k123=list(product(range(3), repeat=3))
+for i123 in itr_i123:
+    j1=j2=j3=l1=l2=l3=0
+    i1,i2,i3=i123
+    for k123 in itr_k123:
+        k1,k2,k3=k123
+        HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+removable=dict()
+for a in requested_keys.keys():
+    if integrals_all.get(a)!=None:
+        removable[a]=a
+sizeI=len(requested_keys.keys())
+for keyr in integrals_all.keys():
+    getV=requested_keys.get(keyr)
+    if getV!=None:
+        requested_keys.pop(keyr)
+sizeE=len(requested_keys.keys())
+print(LOOP,sizeI,sizeE)
+LOOP+=1
 
 
 
@@ -695,18 +808,18 @@ keyslist=[kr for kr in requested_keys.keys()]
 for kr in keyslist:
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
     if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=2:
-        #print(kr)
-        N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
-        integrals_all.get(kr)
-        #HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
-        #HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
-        #HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
+#print(kr)
+N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
+integrals_all.get(kr)
+#HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
+#HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
+#HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
 
 for kr in keyslist:
     N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=list(kr) 
     if max([i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3])<=2:
-        N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
-        integrals_all.get(kr)
+N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=kr
+integrals_all.get(kr)
 #        HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
 #        HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
 #        HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
@@ -718,7 +831,7 @@ print(len(requested_keys.keys()))
 for keyr in integrals_all.keys():
     getV=requested_keys.get(keyr)
     if getV!=None:
-        requested_keys.pop(keyr)
+requested_keys.pop(keyr)
 print(len(requested_keys.keys()))
 keyslist=[kr for kr in requested_keys.keys()]
 #for kr in keyslist:
@@ -734,6 +847,7 @@ keyslist=[kr for kr in requested_keys.keys()]
 requested_keys_save=copy.deepcopy(requested_keys)
 
 
+# In[ ]:
 
 
 #
@@ -743,8 +857,7 @@ requested_keys_save=copy.deepcopy(requested_keys)
 #  (N; i j+1 k l ) <= (N;i+1 j k l), (N; i j k l)
 #  (N; i j k l+1 ) <= (N;j k+1 l), (N; i j k l)
 #
-#  MAYBE SOMETHING NECESSARY ARE STILL MISSING; 
-#  IF WE DETECT THEM, WE TRY TO COMPUTE THEM BY "HORIZONTAL" ON THE FLY!
+#  MAYBE SOMETING NECESSARY ARE STILL MISSING; IF WE DETECT THEM, WE TRY TO COMPUTE THEM BY "HORIZONTAL" ON THE FLY!
 #
 def try_to_compute(kr,INFO=0):
     if INFO==1:
@@ -829,6 +942,17 @@ def TRANSFER2(D,N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3,INFO=0):
         if (INFO==1):
             print("TRANSFER(", key1,"->",keyn, "\n    FAILS AT KEY0=",key0)
         return key0
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
 print("TRANSFER1 & 2")
 requested_keys=dict()
 sizeI=0
@@ -894,8 +1018,7 @@ while (sizeI!=sizeE):
         print(sizeI,sizeE)
 
 
-
-# In[134]:
+# In[ ]:
 
 
 counter
@@ -951,11 +1074,12 @@ itr_ijkl=list(product(range(2), repeat=12))
 index=1
 INTERCHANGED=0
 ptlost=[]
+formulas=[]
 for ijkl in itr_ijkl:
     pt=tuple([0]+list(ijkl))
     N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3=pt
 
-    if (ii1+ii2+ii3)<=1 and (ij1+ij2+ij3)<=1 and (ik1+ik2+ik3)<=1 and (il1+il2+il3)<=1:
+    if (ii1+ii2+ii3)==1 and (ij1+ij2+ij3)==1 and (ik1+ik2+ik3)==1 and (il1+il2+il3)==1:
         #print(pt)
         #print(N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3)
         #print("Checks ", pt[0],pt[1:],pt,type(pt))
@@ -963,20 +1087,23 @@ for ijkl in itr_ijkl:
         #print(type((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)))
         getV=integrals_all.get((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3))
         #print((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3),getV)
+        print("\n\n\n\n")
         if getV!=None:
             F=1
-            print(index,pt,"FOUND",getV)
+            print(index,pt,"FOUND")
+            print(getV)
+            formulas.append([pt,str(getV)])
             index+=1
-        #for ptn in interchanged(pt):
-        #    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
-        #    #print(ptn,type(ptn),(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)==ptn)
-        #    getW=integrals_all.get((N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3))
-        #    if getW!=None and getV==None:
-        #        print(index,pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
-        #        print(getW)
-        #        if pt!=ptn:
-        #            INTERCHANGED+=1
-        #            #ptlost.append(pt)
+        for ptn in interchanged(pt):
+            N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ptn
+            #print(ptn,type(ptn),(N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)==ptn)
+            getW=integrals_all.get(ptn)
+            #if getW!=None and getV!=None:
+                #print(pt,"INDEX INTERCHANGED, AND FOUND" ,ptn, "interchange:",not pt==ptn)
+                #print(getW)
+                #if pt!=ptn:
+                #    INTERCHANGED+=1
+                    #ptlost.append(pt)
         #        F=1
         #        index+=1
         #        break
@@ -994,7 +1121,136 @@ print(ptlost)
 # In[ ]:
 
 
-# In[136]:
+import pickle
+ 
+with open('2eri.pickle', mode='wb') as f:
+    pickle.dump(formulas, f)        
+print(integrals_all.get((0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)))
+print(integrals_all.get((0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)))
+
+
+# In[ ]:
+
+
+for tn in ["TN0", "TN1","TN2","TN3","TN4","TN5","TN6"]:
+    FOUND=False
+    for f in formulas:
+        if f[1].find(tn)>=0:
+            FOUND=True
+            break
+    print(tn,FOUND)
+    
+
+
+# In[ ]:
+
+
+sympy.sympify(str(integrals_all.get((0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))))
+
+
+# In[ ]:
+
+
+formulas
+
+
+# In[ ]:
+
+
+a,b,c,d, p, q=symbols("a b c d p q")
+XA,YA,ZA=symbols("XA YA ZA")
+XB,YB,ZB=symbols("XB YB ZB")
+XC,YC,ZC=symbols("XC YC ZC")
+XD,YD,ZD=symbols("XD YD ZD")
+XP,YP,ZP=symbols("XP YP ZP")
+XQ,YQ,ZQ=symbols("XQ YQ ZQ")
+XAB=symbols("XAB")
+XPA=symbols("XPA")
+TN0,TN1=symbols("TN0,TN1")
+b=a
+p=a+b
+
+X_P=(a*XA+b*XB)/p
+Y_P=(a*YA+b*YB)/p
+Z_P=(a*ZA+b*ZB)/p
+d=c
+q=c+d
+
+X_Q=(c*XC+d*XD)/q
+Y_Q=(c*YC+d*YD)/q
+Z_Q=(c*ZC+d*ZD)/q
+X_AB=XA-XB
+X_PA=XP-XA
+X_PQ=XP-XQ
+X_CD=XC-XD
+F1=sympy.sympify(str(integrals_all.get((0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))))
+F2=sympy.sympify(str(integrals_all.get((0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0))))
+F3=sympy.sympify("XAB")
+
+
+# In[ ]:
+
+
+F1.subs(XPA,X_PA)
+
+
+# In[ ]:
+
+
+FORSUBS=[]
+for n,m in zip(list(F1.free_symbols),[TN0,TN1,XPA,XPQ,p,q]):
+    print(n,m,n==m)
+    FORSUBS.append((n,m))
+
+
+# In[ ]:
+
+
+for j in [str(i) for i in (F1.free_symbols)]:
+    k=sympy.sympify(j)
+    print(k in F1.free_symbols)
+
+
+# In[ ]:
+
+
+F1.subs(FORSUBS)
+
+
+# In[ ]:
+
+
+F1
+
+
+# In[ ]:
+
+
+sympy.sympify(str(integrals_all.get((0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))))
+
+
+# In[ ]:
+
+
+str_expr = "x**2 + 3*x - 1/2"
+expr = sympy.sympify(str_expr)
+expr
+expr.subs(x, XAB)
+
+
+# In[ ]:
+
+
+[XAB,F3.subs([(x,1)])]
+
+
+# In[ ]:
+
+
+(F1*F1).as_terms()[1][0]
+
+
+# In[ ]:
 
 
 for ky in integrals_all.keys():
@@ -1004,7 +1260,7 @@ for ky in integrals_all.keys():
 integrals_all.get((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
 
 
-# In[141]:
+# In[ ]:
 
 
 itr_ijkl=list(product(range(2), repeat=12))
@@ -1015,7 +1271,7 @@ for ijkl in itr_ijkl:
         print(pt,integrals_all.get((N,ii1,ii2,ii3,ij1,ij2,ij3,ik1,ik2,ik3,il1,il2,il3)))
 
 
-# In[142]:
+# In[ ]:
 
 
 def try_to_compute2(kr):
@@ -1055,7 +1311,7 @@ for ijkl in itr_ijkl:
         
 
 
-# In[143]:
+# In[ ]:
 
 
 for x in ptlost:
@@ -1065,7 +1321,7 @@ for x in ptlost:
     pt2=N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3
 
 
-# In[144]:
+# In[ ]:
 
 
 REQUIRED=[]
@@ -1077,4 +1333,287 @@ for y in ptlost:
             REQUIRED.append(x[1])
 print(REQUIRED)
     
+
+
+# In[ ]:
+
+
+requested_keys=dict()
+integrals_all=dict()
+NMAX=11
+for i in range(NMAX):
+    integrals_all[(i,0,0,0,0,0,0,0,0,0,0,0,0)]=TN(i)    
+
+def late_evaluate(ckeys):
+#
+# THIS FUNCTION COMPUTES THE TWO-ELECTRON INTEGRAL AT CKEYS THROUGH RECUSION,
+#   USING THE DATA WHICH HAVE ALREADY BEEN COMPUTED,
+#   AND WRITING THE RESULTS WHICH HAVE JUST BEEN COMPUTED
+#
+    N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3=ckeys
+    if integrals_all.get(ckeys)!=None:
+        print("FOUND")
+        return 1
+    # VERTICAL:
+    if j1==j2==j3==k1==k2==k3==l1==l2==l3==0:
+        #print("VERTICAL")
+        VERTICAL("X",N,i1-1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        VERTICAL("Y",N,i1,i2-1,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        VERTICAL("Z",N,i1,i2,i3-1,j1,j2,j3,k1,k2,k3,l1,l2,l3)
+        return
+    if j1==j2==j3==l1==l2==l3==0:
+        HORIZONTAL("X",N,i1,i2,i3,j1,j2,j3,k1-1,k2,k3,l1,l2,l3)
+        HORIZONTAL("Y",N,i1,i2,i3,j1,j2,j3,k1,k2-1,k3,l1,l2,l3)
+        HORIZONTAL("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3-1,l1,l2,l3)
+        return
+    if j1-1>=0:
+        TRANSFER1("X",N,i1,i2,i3,j1-1,j2,j3,k1,k2,k3,l1,l2,l3)
+    if j2-1>=0:
+        TRANSFER1("Y",N,i1,i2,i3,j1,j2-1,j3,k1,k2,k3,l1,l2,l3)
+    if j3-1>=0:
+        TRANSFER1("Z",N,i1,i2,i3,j1,j2,j3-1,k1,k2,k3,l1,l2,l3)
+    if l1-1>=0:
+        TRANSFER2("X",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1-1,l2,l3)
+    if l2-1>=0:
+        TRANSFER2("Y",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2-1,l3)
+    if l3-1>=0:
+        TRANSFER2("Z",N,i1,i2,i3,j1,j2,j3,k1,k2,k3,l1,l2,l3-1)
+    #print(requested_keys.keys())
+
+ckeys=(0,1,0,0,0,0,0,0,0,0,0,0,0)    
+late_evaluate(ckeys)    
+#requested_keys.keys()
+
+CurrentN=list(ckeys)[0]
+
+import copy
+IsFound=None
+while(IsFound==None and CurrentN<NMAX):
+    requested_keys_copy=copy.deepcopy(requested_keys)
+    for ckey in requested_keys_copy.keys():
+        if min(list(ckey))>=0:
+            F=late_evaluate(ckey)
+            if F==1:
+                print("\n\nCOMPUTED",ckey,integrals_all.get(ckey))
+                requested_keys.pop(ckey)
+
+    late_evaluate(ckeys)
+    IsFound=integrals_all.get(ckeys)
+    if IsFound!=None:
+        print(ckeys, "is computed")
+print(IsFound)        
+
+ckeys=(0,2,0,0,0,0,0,0,0,0,0,0,0)    
+late_evaluate(ckeys)    
+#requested_keys.keys()
+
+CurrentN=list(ckeys)[0]
+
+import copy
+IsFound=None
+while(IsFound==None and CurrentN<NMAX):
+    requested_keys_copy=copy.deepcopy(requested_keys)
+    for ckey in requested_keys_copy.keys():
+        if min(list(ckey))>=0:
+            F=late_evaluate(ckey)
+            if F==1:
+                print("\n\nCOMPUTED",ckey,integrals_all.get(ckey))
+                requested_keys.pop(ckey)
+
+    late_evaluate(ckeys)
+    IsFound=integrals_all.get(ckeys)
+    if IsFound!=None:
+        print(ckeys, "is computed")
+print(IsFound)        
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+AX,AY,AZ,BX,BY,BZ,CX,CY,CZ,DX,DY,DZ=symbols("AX AY AZ BX BY BZ CX CY CZ DX DY DZ")
+z1,z2,z3,z4=symbols("z1 z2 z3 z4")
+f=T0000(1,1,1,1,[AX,0,0],[0,0,0],[CX,0,0],[1,1,1])
+print(f)
+
+
+# In[ ]:
+
+
+ckeys=(0,0,0,0,0,0,0,0,0,0,0,0,0)
+v0000=integrals_all.get(ckeys)
+ckeys=(0,1,0,0,0,0,0,0,0,0,0,0,0)
+v1000=integrals_all.get(ckeys)
+ckeys=(0,2,0,0,0,0,0,0,0,0,0,0,0)
+v2000=integrals_all.get(ckeys)
+
+
+# # Check the validity of the formulas
+# A reference shows the formula:
+# 
+# $\theta^N_{i,0,k+1,0} = -\frac{bX_{AB}+dX_{CD}}{q}\theta^N_{i,0,k,0}  -\frac{i}{2q}\theta^N_{i-1,0,k,0}+\frac{k}{2p}\theta^N_{i,0,k-1,0}-\frac{p}{q}\theta^N_{i+1,0,k,0}$
+# 
+# However another uses different one:
+# 
+# $\theta^N_{i,0,k+1,0} = -\frac{bX_{AB}+dX_{CD}}{q}\theta^N_{i,0,k,0} +\frac{i}{2q}\theta^N_{i-1,0,k,0}+\frac{k}{2p}\theta^N_{i,0,k-1,0}-\frac{p}{q}\theta^N_{i+1,0,k,0}$
+# 
+
+# In[ ]:
+
+
+X_AB=AX
+X_CD=CX-1
+X_P=aa*AX/(aa+bb)
+aa=1
+bb=1
+cc=1
+dd=1
+pp=aa+bb
+qq=cc+dd
+X_Q=(cc*CX+dd*1)/(cc+dd)
+X_PQ=X_P-X_Q
+X_PA=X_P-AX
+alpha=pp*qq/(pp+qq)
+f=T0000(aa,bb,cc,dd,[AX,0,0],[0,0,0],[CX,0,0],[1,0,0])
+
+th0000=f
+th1010=f.diff(AX).diff(CX)/4
+th0010=f.diff(CX)/2
+th1000=f.diff(AX)/2
+th2000=(f.diff(AX).diff(AX)+th0000*2)/4
+th0020=(f.diff(CX).diff(CX)+th0000*2)/4
+
+
+# In[ ]:
+
+
+v0000
+
+
+# In[ ]:
+
+
+v1000
+
+
+# In[ ]:
+
+
+v2000
+
+
+# 
+
+# In[ ]:
+
+
+V_T_0_0000=2*sympy.pi**2.5/pp/qq/sympy.sqrt(pp+qq)*KXYZAB(aa,bb,[AX,0,0],[0,0,0])*KXYZAB(cc,dd,[CX,0,0],[1,0,0])*BOYS(0,alpha*X_PQ*X_PQ)
+V_T_1_0000=2*sympy.pi**2.5/pp/qq/sympy.sqrt(pp+qq)*KXYZAB(aa,bb,[AX,0,0],[0,0,0])*KXYZAB(cc,dd,[CX,0,0],[1,0,0])*BOYS(1,alpha*X_PQ*X_PQ)
+V_T_2_0000=2*sympy.pi**2.5/pp/qq/sympy.sqrt(pp+qq)*KXYZAB(aa,bb,[AX,0,0],[0,0,0])*KXYZAB(cc,dd,[CX,0,0],[1,0,0])*BOYS(2,alpha*X_PQ*X_PQ)
+
+
+# In[ ]:
+
+
+(v0000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,CX-1),(XPA,X_P-AX),(TNS[0],V_T_0_0000),(TNS[1],V_T_1_0000),(AX,1),(CX,2)])).expand()
+
+
+# In[ ]:
+
+
+th0000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,CX-1),(XPA,X_P-AX),(AX,1),(CX,2)])
+
+
+# In[ ]:
+
+
+V_T_0_0000
+
+
+# In[ ]:
+
+
+th0000
+
+
+# In[ ]:
+
+
+(v1000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,CX-1),(XPA,X_P-AX),(TNS[0],V_T_0_0000),(TNS[1],V_T_1_0000),(AX,1),(CX,2)])).expand()
+
+
+# In[ ]:
+
+
+ww=v1000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,CX-1),(XPA,XP-AX),(TNS[0],V_T_0_0000),(TNS[1],V_T_1_0000)])
+ww
+
+
+# In[ ]:
+
+
+(v1000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,(CX-1)),(XPA,(X_P-AX)),(TNS[0],V_T_0_0000),(TNS[1],V_T_1_0000),(AX,1),(CX,2)])).expand()
+
+
+# In[ ]:
+
+
+th1000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,CX-1),(XPA,X_P-AX),(AX,1),(CX,2)])
+
+
+# In[ ]:
+
+
+v2000
+
+
+# In[ ]:
+
+
+(v2000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,(CX-1)),(XPA,(X_P-AX)),(TNS[0],V_T_0_0000),(TNS[1],V_T_1_0000),(TNS[2],V_T_2_0000),(AX,1),(CX,2)])).expand()
+
+
+# In[ ]:
+
+
+(th2000.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,(CX-1)),(XPA,(X_P-AX)),(AX,1),(CX,2)])).expand()
+
+
+# In[ ]:
+
+
+IsFound.subs([(q,qq),(p,pp),(b,bb),(d,dd),(XPQ,X_PQ),(XAB,AX),(XCD,CX-1),(XPA,X_P-AX),(AX,1),(CX,2)])
+
+
+# In[ ]:
+
+
+pp=aa+bb
+qq=cc+dd
+V1010=-(bb*X_AB+dd*X_CD)/qq*th1000+1/2/qq*th0000-pp/qq*th2000
+V0010=-(bb*X_AB+dd*X_CD)/qq*th0000-pp/qq*th1000
+V0020=-(bb*X_AB+dd*X_CD)/qq*th0010+1/2/qq*th0000-pp/qq*th1010
+
+
+# In[ ]:
+
+
+[(V0010.subs([(AX,1),(CX,2)])),(th0010.subs([(AX,1),(CX,2)]))]
+
+
+# In[ ]:
+
+
+[(V1010.subs([(AX,1),(CX,2)])),(th1010.subs([(AX,1),(CX,2)]))]
+
+
+# In[ ]:
+
+
+[(V0020.subs([(AX,1),(CX,2)])),(th0020.subs([(AX,1),(CX,2)]))]
 
