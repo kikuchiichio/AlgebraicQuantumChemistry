@@ -25,15 +25,41 @@ volume="2013:14",year=2013, note="http://dx.doi.org/10.5339/connect.2013.14"}
 
 I put three programs  in the repository:
 
-1 PYUHF.py  (Python program, UHF computation of simple molecules)
+(1) PYUHF.py  (Python program, UHF computation of simple molecule: HeH+)
 
-2 PYRHF.py  (Python program, RHF computation of simple molecules)
+(2) PYRHF.py  (Python program, RHF computation of simple molecule: HeH+)
 
 These programs generate polynomial equations and write them in small sub-programs, which you should compute through the computer algebra package Singular. 
 
-3 ERI.py (Python program. By this program and symbolic differentiation, you can compute every analytic formula of one and two-electron integrals of GTO required in molecular orbital computations. Obara-Saika recursion scheme is implemented for the computations involving general Caetesian Gaussian functions; but we can do without it, since we can use symbolic differentiation. )
+(3) ERI.py (Python program. By this program and symbolic differentiation, you can compute every analytic formula of one and two-electron integrals of GTO required in molecular orbital computations. Obara-Saika recursion scheme is implemented for the computations involving general Caetesian Gaussian functions; but we can do without it, since we can use symbolic differentiation. )
 
 It is an initial simple lesson for beginners. Nevertheless, I expect that it shall reveal to you the algebraic scheme to execute full computations of quantum chemistry.
  
+2022/9/28
+I added three programs  in the repository:
+hese Python programs compute the electronic structure of H3+ in the equilateral triangle. 
+ 
+ The atoms are indexed by A, B, and C, or a, b, and c.
+ The STO-3G are determined by the parameters ZETA, COEFF, and EXPON. 
+ 
+ (4) SZ-SIM-H3P-RHF
+       For RHF computation.  
+       The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices.
+       The variable e : the orbital energy
+       The variable R: the length of the edges, fixed at a positive number.
+ 
+ (5) SZ-SIM-H3P-UHF
+       For UHF computation.  
+       The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices, for spin alpha
+       The variables e : the orbital energy, for spin alpha
+       The variables (u,v,w) : the LCAO coefficients of 1s orbitals on the vertices, for spin beta
+       The variables f : the orbital energy, for spin beta
+       The variable R: the length of the edges, fixed at a positive number.
+ 
+ (6) SZ-SIM-H3P-RHF-DeterminR, SZ-SIM-H3P-RHF-DeterminR-Version2
+       The variables (x,x,x) : the LCAO coefficients of 1s orbitals on the vertices.
+       The variable e : the orbital energy
+       The variable R: the length of the edges, to be optimized as well as other variables.
 
-
+These programs generate polynomial equations and write them in small sub-programs (in "SCIPT.txt"),
+which you should compute through the computer algebra package Singular. 
