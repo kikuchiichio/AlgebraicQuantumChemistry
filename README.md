@@ -61,5 +61,14 @@ hese Python programs compute the electronic structure of H3+ in the equilateral 
        The variable e : the orbital energy
        The variable R: the length of the edges, to be optimized as well as other variables.
 
+2022/10/01
+  (7)SZ-SIM-PZ4.py
+      A test program to compute the analytic forumulas of molecular integrals and the electronic structure of a square molecule composed of pz orbitals.
+  (8)SZ-SIM-SP.py
+        A test program to compute the analytic forumulas of molecular integrals and the electronic structure of 
+        a polyatomic molecule composed of s, px, py, pz orbitals.
+        
+       (7) (8) are still beta editions to check the well-composedness of the algorrithm
+   
 These programs generate polynomial equations and write them in small sub-programs (in "SCIPT.txt"),
 which you should compute through the computer algebra package Singular. 
