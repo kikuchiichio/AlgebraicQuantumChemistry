@@ -17,6 +17,10 @@ In this repository, we put our computer programs which enable us to pursue the f
 
 (3) EXAMPLES of Un-restricted Hartree-Fock (UHF) or Restricted Hartree-Fock (RHF) computations.
 
+
+The progrmams are written in Python, with the intensive usage of sympy library.
+
+
 [KIKUCHI2013] @article{KIKUCHI2013, author="Kikuchi,Akihito", title="An approach to first principles electronic structure computation by symbolic-numeric computation", journal="QScience Connect",
 volume="2013:14",year=2013, note="http://dx.doi.org/10.5339/connect.2013.14"}
 
