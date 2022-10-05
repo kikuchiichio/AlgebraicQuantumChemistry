@@ -28,6 +28,42 @@ The progrmams are written in Python, with the intensive usage of sympy library.
 [KIKUCHI2013] @article{KIKUCHI2013, author="Kikuchi,Akihito", title="An approach to first principles electronic structure computation by symbolic-numeric computation", journal="QScience Connect",
 volume="2013:14",year=2013, note=" http://dx.doi.org/10.5339/connect.2013.14 "}
 
+We also make use of the knowledge of computer algebra expounded by following resources.
+
+@book{kikuchiquantum2021,
+  title={Quantum {M}echanics built on {A}lgebraic {G}eometry: {E}merging {P}hysics through {S}ymbolic {C}omputation},
+  author={Kikuchi, Akihito},
+  year={2021},
+  publisher={Eliva Press}
+}
+
+@article{kikuchigalois,
+  title={Galois and {C}lass {F}ield {T}heory for {Q}uantum {C}hemists},
+  author={Kikuchi, Ichio and Kikuchi, Akihito},
+  publisher={OSF Preprints},journal={OSF Preprints},
+  year={2020},
+  note={\url{https://osf.io/preprints/n46rf/}}
+}
+
+@article{kikuchi2019computational,
+  title={{C}omputational {A}lgebraic {G}eometry and {Q}uantum {M}echanics: {A}n {I}nitiative toward {P}ost {C}ontemporary {Q}uantum {C}hemistry},
+  author={Kikuchi, Akihito and Kikuchi, Ichio},
+  journal={Journal of Multidisciplinary Research and Reviews},
+  volume={1},
+  pages={47--79},
+  year={2019},
+  publisher={Innovationinfo},
+  note={\url{ https://www.innovationinfo.org/journal-of-multidisciplinary-research-and-reviews } \url{ DOI: 10.3619/JMRR.1000118 }}
+}
+
+@book{kikuchi2018computer,
+  title={Computer {A}lgebra and {M}aterials {P}hysics: {A} {P}ractical {G}uidebook to {G}roup {T}heoretical {C}omputations in {M}aterials {S}cience},
+  author={Kikuchi, Akihito},
+  volume={272},
+  year={2018},
+  publisher={Springer}
+}
+
 
 2022/09/22
 
