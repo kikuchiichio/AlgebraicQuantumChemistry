@@ -1,5 +1,5 @@
 # AlgebraicQuantumChemistry
-Research of quantum chemistry through computational algebra
+## Research of quantum chemistry through computational algebra
 
 In this project,  we study the first-principles approach of quantum chemistry through symbolic computation.
 
