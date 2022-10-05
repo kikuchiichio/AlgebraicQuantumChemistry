@@ -113,12 +113,15 @@ hese Python programs compute the electronic structure of H3+ in the equilateral 
 2022/10/01
 
   We often meet limiting cases of molecular integrals where the center positions of involved atomic bases are coincident. 
-  In those cases, the formulas generated for different atomic basis centers yield the terms 0/0, which should remain finite in theory.
+  In those cases, the formulas (prepared for distinct atomic basis centers) yield the terms 0/0, which should remain finite in theory.
   However, in practice, if we naively substitute the numerical parameters in the formulas, they falsely diverge. 
-  To avoid this trouble, we should separate the coincident centers slightly (by an indeterminate T), 
+  
+  To solve this matter, we should separate the coincident centers slightly (by an indeterminate T), 
   and then compute the limit by leading T to zero. 
   
-  From the following programs you shall learn how we should treat the symbolic limits.
+  In so far as we use numbers and symbols indiscriminately, we should take special care not to be bothered by numerical errors.
+  
+  From the following programs you shall learn how to do when you confront with this sort of difficulty.
  
   (7)SZ-SIM-PZ4.py
       A test program to compute the analytic formulas of molecular integrals and the electronic structure of a square molecule composed of pz orbitals.
