@@ -1,6 +1,6 @@
 # AlgebraicQuantumChemistry
 ## Research of quantum chemistry through computational algebra
-## Language: Python with sympy and numpy electr
+## Language: Python with sympy, numpy, and other libraries. 
 ## Aim: 
 ### Computation of analitycal formulas of molecular integrals with GTO (Gaussian-Type Orbitals)
 ### Study of electronic structures of molecule from the viewpoint of algebraic variety
