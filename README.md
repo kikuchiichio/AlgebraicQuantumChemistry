@@ -1,5 +1,6 @@
 # AlgebraicQuantumChemistry
 ## Research of quantum chemistry through computational algebra
+## Language: Python with sympy and numpy
 
 In this project,  we study the first-principles approach of quantum chemistry through symbolic computation.
 
