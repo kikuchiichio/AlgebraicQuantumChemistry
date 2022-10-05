@@ -139,5 +139,5 @@ which you should compute through the computer algebra package Singular.
  (9) SZ-SIM-SP-VER2.py
         A test program to compute the analytic formulas of molecular integrals and the electronic structure 
         of a polyatomic molecule composed of s, px, py, pz orbitals. I eliminated apparent bugs from SZ-SIM-SP.py. 
-        It shows you a model use of functions in this library.  
+        It shows you a typical use of functions in this library.  
         
