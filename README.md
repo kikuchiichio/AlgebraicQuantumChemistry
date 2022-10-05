@@ -62,13 +62,28 @@ hese Python programs compute the electronic structure of H3+ in the equilateral 
        The variable R: the length of the edges, to be optimized as well as other variables.
 
 2022/10/01
+  We often meet limiting cases of molecular integrals where the center positions of involved atomic bases are coincident. 
+  In those cases, the formulas generated for different atomic basis centers yield the terms 0/0, which should remain finite in theory.
+  However, in practice, if we naively substitute the numerical parameters in those formuras, they falsely diverge. 
+  To avoid this trouble, we should separate the coincident centers silghtly (by an interterminate T), 
+  and then compute the limit by leading T to zero. 
+  
+  From the following programs you shall learn how we should treat the symbolic limits.
+ 
   (7)SZ-SIM-PZ4.py
       A test program to compute the analytic forumulas of molecular integrals and the electronic structure of a square molecule composed of pz orbitals.
   (8)SZ-SIM-SP.py
-        A test program to compute the analytic forumulas of molecular integrals and the electronic structure of 
-        a polyatomic molecule composed of s, px, py, pz orbitals.
+        A test program to compute the analytic forumulas of molecular integrals and the electronic structure or
+        of a polyatomic molecule composed of s, px, py, pz orbitals.
         
-       (7) (8) are still beta editions to check the well-composedness of the algorrithm
+       (7) (8) are still beta editions to check the well-composedness of the algorithm.
    
 These programs generate polynomial equations and write them in small sub-programs (in "SCIPT.txt"),
 which you should compute through the computer algebra package Singular. 
+
+202/10/05
+ (9) SZ-SIM-SP-VER2.py
+        A test program to compute the analytic forumulas of molecular integrals and the electronic structure 
+        of a polyatomic molecule composed of s, px, py, pz orbitals. I eliminated apparent bugs from SZ-SIM-SP.py. 
+        It shows you a model use of functions in this library.  
+        
