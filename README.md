@@ -26,7 +26,7 @@ The progrmams are written in Python, with the intensive usage of sympy library.
 
 
 [KIKUCHI2013] @article{KIKUCHI2013, author="Kikuchi,Akihito", title="An approach to first principles electronic structure computation by symbolic-numeric computation", journal="QScience Connect",
-volume="2013:14",year=2013, note="http://dx.doi.org/10.5339/connect.2013.14"}
+volume="2013:14",year=2013, note=" http://dx.doi.org/10.5339/connect.2013.14 "}
 
 
 2022/09/22
