@@ -1,25 +1,7 @@
-# AlgebraicQuantumChemistry
+<h1> AlgebraicQuantumChemistry </h1>
 ## Research of quantum chemistry through computational algebra
 ## Language: Python with sympy, numpy, and other libraries. 
 ## Aim: 
 ### Computation of analitycal formulas of molecular integrals with GTO (Gaussian-Type Orbitals)
 ### Study of electronic structures of molecule from the viewpoint of algebraic variety
 
-In this project,  we study the first-principles approach of quantum chemistry through symbolic computation.
-
-In [KIKUCHI2013], Akihito Kikuchi presented an example of the first-principles approach of quantum chemistry, wherein a contemporary technique of computational algebraic geometry is adopted. The author of that article prepared the analytic energy functional of one hydrogen molecule. He approximated it by a polynomial, and, through symbolic differentiation, he composed a set of polynomial equations which gives the minima of the energy functional.  Finally, he was successful in solving it using the Gr\"obner basis technique. To construct one- or two-electron integrals, he used the Slater-Type Orbitals (STO) for atomic orbitals.
-
-However, the STO  is not the standard way of today's quantum chemistry, for it is an unsettled problem how to construct analytical representations of two-electron integrals in poly-atomic systems using STO.  Currently, as an alternative, most researchers use Gaussian-Type-Orbitals (GTO) because of the easiness of GTO in symbolic manipulation.
-
-For this reason, we choose GTO as the basic ingredient of the research. We prepare the electron integrals using GTO, and according to the fundamental scheme of [KIKUCHI2013], we derive the polynomial equations to unravel the quantum states. We solve them through computational algebra packages, such as Singular, using symbolic-numeric computations.
-
-In this repository, we put our computer programs which enable us to pursue the following targets.
-
-(1) The analytical computation of atomic-orbital integrals by GTO
-
-(2) The algebraic method to solve polynomial equations by the Groebner basis technique
-
-(3) EXAMPLES of Unrestricted Hartree-Fock (UHF) or Restricted Hartree-Fock (RHF) computations.
-
-
-The progrmams are written in Python, with the intensive usage of sympy library.
