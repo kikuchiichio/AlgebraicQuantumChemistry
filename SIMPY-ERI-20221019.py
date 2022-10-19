@@ -49,17 +49,21 @@
 # 
 # ## We use several functions to conduct recursive computations.
 # 
-# In the folllowing, we omit the subscript index (1,2,3) which represents (x,y,z). 
+# In the folllowing, we omit the subscript index (1,2,3) which represents (x,y,z).
+#
+# We use i to represent (i1,i2,i3); likewise for other indexes.  
 # 
-# (i+1) means the shift from i with the increasement to one of the coordinate by 1; the direction of the increasment shall be clear in the contexts. 
+# (i+1) means the shift from i with the increasement by 1 on one of the coordinate ; the direction of the increasment shall be clear in the contexts. 
 # 
+# We represent the integrals by the shorthand (N; i j k l).
+#
 # ## <Vertical> computes in this way:  
 # 
 # (N; i+1 0 0 0 ) <== (N; i 0 0 0) , (N+1; i 0 0 0) , (N; i-1 0 0 0), (N+1; i-1 0 0 0)
 # 
 # 
 # 
-# ## Horizontal computes in this way:
+# ## <Horizontal> computes in this way:
 # 
 # (N; i 0 k+1 0) <== (N; i 0 k 0), (N; i-1 0 k 0), (N; i, 0, k-1, 0), (N; i+1 0 k 0)
 # 
@@ -120,7 +124,7 @@
 # print(IsFound)  
 # 
 # 
-# <C4> My implementation simply applies every formulas to check the computability of the integrals. It would cause a troube.
+# <C4> My implementation simply applies every formula to check the computability of the integrals. It would cause a troube.
 # 
 # For example, let us compute I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,1).
 #  
@@ -145,11 +149,17 @@
 #                   I(1, -1,0,0, 0,0,0, 0,0,1, 0,0,0),
 #                   I(0, -2,0,0, 0,0,0, 0,0,1, 0,0,0), and
 #                   I(1, -2,0,0, 0,0,0, 0,0,1, 0,0,0).
-#       All of those integrals have negative values in the keys, and we should regard them as zero.
-#       Then we get the integral I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0)=0, which is absurd.
 # 
-# We must avoid such absurd applications of formulas. 
-# To this end, in <VERTICAL> and <HORIZONTAL>, we do not compute further if the required integrals have negative values in the keys.
+#       In general, the integrals with negative values in the key occur at the bottom of the recursion.
+#       It is rather rational for us to set zero at those integrals, because they get out of the domain of definition.
+#       Meanwhile the recusion is computable from the integrals which are involved in the formula and defined in the proper domain. 
+#
+#       However, in the case of (P3'), all of the required integrals have negative values in the keys. 
+#       If we regard them as zero,
+#       we get the integral I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0)=0, which is absurd.
+#
+# We must avoid such absurd applications of formulas.
+# To this end, in <VERTICAL> and <HORIZONTAL>, we do not compute further if all of the required integrals have negative values in the keys.
 # 
 # 
 # The integrals are numerically evaluated in two ways: 
