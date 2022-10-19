@@ -139,7 +139,7 @@
 #   We request (D) I(0, 0,0,1, 0,0,0, 0,0,0).
 #   
 # (P4) I(0, 0,0,1, 0,0,0, 0,0,0) is computable by <vertical> along z-direction, 
-#      from I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) and I(1, 0,0,0, 0,0,0, 0,0,1, 0,0,0).
+#      from I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) and I(1, 0,0,0, 0,0,0, 0,0,0, 0,0,0).
 #      
 # Nevertheless, we might assume another path.
 # 
@@ -151,7 +151,7 @@
 #                   I(1, -2,0,0, 0,0,0, 0,0,1, 0,0,0).
 # 
 #       In general, the integrals with negative values in the key occur at the bottom of the recursion.
-#       It is rather rational for us to set zero at those integrals, because they get out of the domain of definition.
+#       It is rational for us to set zero at those integrals, because they get out of the domain of definition.
 #       Meanwhile the recusion is computable from the integrals which are involved in the formula and defined in the proper domain. 
 #
 #       However, in the case of (P3'), all of the required integrals have negative values in the keys. 
