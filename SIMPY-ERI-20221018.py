@@ -49,17 +49,18 @@
 # 
 # ## We use several functions to conduct recursive computations.
 # 
-# In the folllowing, we omit the subscript index (1,2,3) which represents (x,y,z). 
+# In the folllowing, we omit the subscript index (1,2,3) which represents (x,y,z). Namely (i1,i2,i3) is represented by i. Likewise for j,k,l. 
 # 
-# (i+1) means the shift from i with the increasement to one of the coordinate by 1; the direction of the increasment shall be clear in the contexts. 
+# (i+1) means the shift from i with the increasement by 1 on one of the coordinate ; the direction of the increasment shall be clear in the contexts. 
 # 
+#  We represent the integrals by a shorthand (N,i,j,k,l).
+#
 # ## <Vertical> computes in this way:  
 # 
 # (N; i+1 0 0 0 ) <== (N; i 0 0 0) , (N+1; i 0 0 0) , (N; i-1 0 0 0), (N+1; i-1 0 0 0)
 # 
 # 
-# 
-# ## Horizontal computes in this way:
+# ## <Horizontal> computes in this way:
 # 
 # (N; i 0 k+1 0) <== (N; i 0 k 0), (N; i-1 0 k 0), (N; i, 0, k-1, 0), (N; i+1 0 k 0)
 # 
@@ -84,22 +85,22 @@
 # 
 # <C2> The recusive process finally touches its bottom, where it shall find {I(N;0,0,0,0,0,0,0,0,0,0,0,0),N=1,...Nmax}. Hence it terminates after a finite numer of computations.
 # 
-# <C4> My implementation simply applies every formulas to check the computability of the integrals. It would cause a troube.
+# <C4> My implementation simply applies every formula to check the computability of the integrals. It would cause a troube.
 # 
 # For example, let us compute I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,1).
 #  
 # (P1) It is computed by Transfer2 along z-direction, from I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) and I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0).
 # 
-# (P2) II(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) is already prepared at <1>. We request the computation of I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0).
+# (P2) I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) is already prepared at <1>. We request the computation of I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0).
 # 
-# (P3) We compute I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) by Horizontal along z-direction,
+# (P3) We compute I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) by <Horizontal> along z-direction,
 #   from (A) I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0), (B) I(0, 0,0,-1, 0,0,0, 0,0,0, 0,0,0), (C) I(0, 0,0,0, 0,0,0, 0,0,-1, 0,0,0), 
 #        and (D) I(0, 0,0,1, 0,0,0, 0,0,0)
 #   (A) is already prepared. (B) and (C) are the integrals not defined, and we safely regard them as zero.
 #   We request (D) I(0, 0,0,1, 0,0,0, 0,0,0).
 #   
 # (P4) I(0, 0,0,1, 0,0,0, 0,0,0) is computable by <vertical> along z-direction, 
-#      from I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) and I(1, 0,0,0, 0,0,0, 0,0,1, 0,0,0).
+#      from I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) and I(1, 0,0,0, 0,0,0, 0,0,0, 0,0,0).
 #      
 # Nevertheless, we might assume another path.
 # 
