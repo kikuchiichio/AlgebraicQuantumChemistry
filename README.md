@@ -141,3 +141,17 @@ which you should compute through the computer algebra package Singular.
         of a polyatomic molecule composed of s, px, py, pz orbitals. I eliminated apparent bugs from SZ-SIM-SP.py. 
         It shows you a typical use of functions in this library.  
         
+2022/10/19
+
+(10) SIMPY-ERI-20221018.py
+(11) SIMPY-ERI-20221019.py
+      These programms demonstrate how to compute the analytic formulas of two-electron integrals smartly. 
+      The components of the programs are extracted from the already-registered programs.  
+      The tentative computations in (10) revealed the wrong behaviour in the Obara-Saika recursion of the programs (3)(7)(8).
+      I removed this defect and rewrite the program into (11).
+      The cause of that wrong behavior is discussed in the head commentary parts of (10) and (10). 
+      To be short, the implementation in (10) uses recursion foumulas sometimes in an improper way, 
+      whereby some of the terms in the recusion get out of the domain of definition and the contributions from certain terms are nullified.
+      
+      
+      
