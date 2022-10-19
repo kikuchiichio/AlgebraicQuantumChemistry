@@ -92,12 +92,14 @@ hese Python programs compute the electronic structure of H3+ in the equilateral 
  The STO-3G are determined by the parameters ZETA, COEFF, and EXPON. 
  
  (4) SZ-SIM-H3P-RHF
+ 
        For RHF computation.  
        The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices.
        The variable e : the orbital energy
        The variable R: the length of the edges, fixed at a positive number.
  
  (5) SZ-SIM-H3P-UHF
+ 
        For UHF computation.  
        The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices, for spin alpha
        The variables e : the orbital energy, for spin alpha
@@ -106,8 +108,11 @@ hese Python programs compute the electronic structure of H3+ in the equilateral 
        The variable R: the length of the edges, fixed at a positive number.
  
  (6) SZ-SIM-H3P-RHF-DeterminR, SZ-SIM-H3P-RHF-DeterminR-Version2
+ 
        The variables (x,x,x) : the LCAO coefficients of 1s orbitals on the vertices.
+ 
        The variable e : the orbital energy
+       
        The variable R: the length of the edges, to be optimized as well as other variables.
 
 2022/10/01
@@ -124,12 +129,15 @@ hese Python programs compute the electronic structure of H3+ in the equilateral 
   From the following programs you shall learn how to do when you confront with this sort of difficulty.
  
   (7)SZ-SIM-PZ4.py
-      A test program to compute the analytic formulas of molecular integrals and the electronic structure of a square molecule composed of pz orbitals.
+  
+    A test program to compute the analytic formulas of molecular integrals and the electronic structure of a square molecule composed of pz orbitals.
+
   (8)SZ-SIM-SP.py
-        A test program to compute the analytic formulas of molecular integrals and the electronic structure or
-        of a poly-atomic molecule composed of s, px, py, pz orbitals.
+  
+    A test program to compute the analytic formulas of molecular integrals and the electronic structure or
+    of a poly-atomic molecule composed of s, px, py, pz orbitals.
         
-       (7) (8) are still beta editions to check the soundness of the algorithm.
+   (7) (8) are still beta editions to check the soundness of the algorithm.
    
 These programs generate polynomial equations and write them in small sub-programs (in "SCIPT.txt"),
 which you should compute through the computer algebra package Singular. 
@@ -137,15 +145,18 @@ which you should compute through the computer algebra package Singular.
 2020/10/05
 
  (9) SZ-SIM-SP-VER2.py
-        A test program to compute the analytic formulas of molecular integrals and the electronic structure 
-        of a polyatomic molecule composed of s, px, py, pz orbitals. I eliminated apparent bugs from SZ-SIM-SP.py. 
-        It shows you a typical use of functions in this library.  
+
+A test program to compute the analytic formulas of molecular integrals and the electronic structure 
+of a polyatomic molecule composed of s, px, py, pz orbitals. I eliminated apparent bugs from SZ-SIM-SP.py. 
+It shows you a typical use of functions in this library.  
         
 2022/10/19
 
 (10) SIMPY-ERI-20221018.py
+
 (11) SIMPY-ERI-20221019.py
-      These programms demonstrate how to compute the analytic formulas of two-electron integrals smartly. 
+
+These programms demonstrate how to compute the analytic formulas of two-electron integrals smartly. 
       The components of the programs are extracted from the already-registered programs.  
       The tentative computations in (10) revealed the wrong behaviour in the Obara-Saika recursion of the programs (3)(7)(8).
       I removed this defect and rewrite the program into (11).
