@@ -41,7 +41,7 @@
 #     
 # Likewise
 # 
-# $(j1,j2,j3)$: ... with respect to the secicond orbital.
+# $(j1,j2,j3)$: ... with respect to the second orbital.
 # 
 # $(k1,k2,k3)$: ... with respect to the third orbital.
 # 
@@ -109,10 +109,16 @@
 #                   I(1, -1,0,0, 0,0,0, 0,0,1, 0,0,0),
 #                   I(0, -2,0,0, 0,0,0, 0,0,1, 0,0,0), and
 #                   I(1, -2,0,0, 0,0,0, 0,0,1, 0,0,0).
-#       All of those integrals have negative values in the keys, and we should regard them as zero.
-#       Then we get the integral I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0)=0, which is absurd.
+#       All of those integrals have negative values in the keys. 
 # 
-# We must avoid such absurd application of formulas. 
+#       In general, the integrals with negative values in the key occur at the bottom of the recursion
+#       It is rather rational for us to set zero at those integrals, because they get out of the domain of definition.
+#       Therein the recusion is computable from other integrals defined in the proper domain. 
+#
+#       However, in the case of (P3'), if we regard four integrals of this type as ro,
+#       we get the integral I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0)=0, which is absurd.
+# 
+# We must avoid such an absurd application of formulas. 
 # 
 # However, in the following, we do computations without this caution.
 # 
