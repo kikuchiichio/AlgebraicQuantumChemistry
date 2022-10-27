@@ -163,6 +163,16 @@ These programms demonstrate how to compute the analytic formulas of two-electron
       The cause of that wrong behavior is discussed in the head commentary parts of (10) and (10). 
       To be short, the implementation in (10) uses recursion foumulas sometimes in an improper way, 
       whereby some of the terms in the recusion get out of the domain of definition and the contributions from certain terms are nullified.
+
+2022/10/27
+
+(12) PY2ERI-ABAB-2022.py
+
+This program computes two-center integrals by differentiation. 
+The four orbitals are placed at two (not four) conincident positions in two places A and B, in such way that [(z1,A)(z2,B)|(z3,A),(z4,B)].
+The integrals have singularities of the form 0/0 which should remain finite. I show how to evaluate the limit.
       
-      
+(13) PY1ERI-2022.py
+
+This program computes one-center integrals, viz, the GTO matrix elements of a coulomb potential, using Obara-Saika recurrence relations.
       
