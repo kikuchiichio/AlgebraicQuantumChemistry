@@ -4,29 +4,29 @@
 # In[ ]:
 
 
-These Python programs compute the electronic structure of H3+ in the equilateral triangle. 
+#These Python programs compute the electronic structure of H3+ in the equilateral triangle. 
 
-The atoms are indexed by A, B, and C, or a, b, and c.
-The STO-3G are determined by the parameters ZETA, COEFF, and EXPON. 
+#The atoms are indexed by A, B, and C, or a, b, and c.
+#The STO-3G are determined by the parameters ZETA, COEFF, and EXPON. 
 
-(1) SZ-SIM-H3P-RHF
-      For RHF computation.  
-      The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices.
-      The variable e : the orbital energy
-      The variable R: the length of the edges, fixed at a positive number.
+#(1) SZ-SIM-H3P-RHF
+#      For RHF computation.  
+#      The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices.
+#      The variable e : the orbital energy
+#      The variable R: the length of the edges, fixed at a positive number.
 
-(2) SZ-SIM-H3P-UHF
-      For UHF computation.  
-      The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices, for spin alpha
-      The variables e : the orbital energy, for spin alpha
-      The variables (u,v,w) : the LCAO coefficients of 1s orbitals on the vertices, for spin beta
-      The variables f : the orbital energy, for spin beta
-      The variable R: the length of the edges, fixed at a positive number.
+#(2) SZ-SIM-H3P-UHF
+#      For UHF computation.  
+#      The variables (x,y,z) : the LCAO coefficients of 1s orbitals on the vertices, for spin alpha
+#      The variables e : the orbital energy, for spin alpha
+#      The variables (u,v,w) : the LCAO coefficients of 1s orbitals on the vertices, for spin beta
+#      The variables f : the orbital energy, for spin beta
+#      The variable R: the length of the edges, fixed at a positive number.
 
-(3) SZ-SIM-H3P-RHF-DeterminR, SZ-SIM-H3P-RHF-DeterminR-Version2
-      The variables (x,x,x) : the LCAO coefficients of 1s orbitals on the vertices.
-      The variable e : the orbital energy
-      The variable R: the length of the edges, to be optimized as well as other variables.
+#(3) SZ-SIM-H3P-RHF-DeterminR, SZ-SIM-H3P-RHF-DeterminR-Version2
+#      The variables (x,x,x) : the LCAO coefficients of 1s orbitals on the vertices.
+#      The variable e : the orbital energy
+#      The variable R: the length of the edges, to be optimized as well as other variables.
 
 
 # In[12]:
@@ -577,7 +577,6 @@ print(sympy.N(V1111),sympy.N(V2111),sympy.N(V2121),sympy.N(V2211),sympy.N(V2221)
 
 import numpy
 R_length=0.9/0.529177
-R_length=1.46
 atomA=[0,0,0]
 atomB=[R_length,0,0]
 atomC=[R_length*1/2,R_length*np.sqrt(3)/2,0]
@@ -642,7 +641,7 @@ for ID in range(3):
                                 V=V+T0000(ca,cb,cc,cd,RA,RB,RC,RD)*DA[I]*DB[J]*DC[K]*DD[L]
                 V=sympy.N(V)
                 #print(RA,RB,RC,RD,V)
-                #TT[ID][JD][KD][LD]=V
+                TT[ID][JD][KD][LD]=V
 
 
 
@@ -927,7 +926,7 @@ for tm in AT:
     p0,p1,p2,p3,p4,p5,p6,p7=tm[0]
     cf=tm[1]
     #print(p0,p1,p2,cf)
-    getF+=x**p0* y**p1* z**p2* u**p3* v**p4* w**p5* e**p5* f**p7*getINT(cf,10000)
+    getF+=x**p0* y**p1* z**p2* u**p3* v**p4* w**p5* e**p6* f**p7*getINT(cf,10000)
 
 
 # In[23]:
