@@ -69,7 +69,7 @@ We also make use of the technique of computer algebra expounded by following res
 }
 
 
-2022/09/22
+2022/09/22; 2023/01/25
 
 I put three programs  in the repository:
 
@@ -79,7 +79,10 @@ I put three programs  in the repository:
 
 These programs generate polynomial equations and write them in small sub-programs, which you should compute through the computer algebra package Singular. 
 
-(3) ERI.py (Python program. By this program and symbolic differentiation, you can compute every analytic formula of one and two-electron integrals of GTO required in molecular orbital computations. Obara-Saika recursion scheme is implemented for the computations involving general Cartesian Gaussian functions; but we can do without it, since we can use symbolic differentiation. ) This file is slightly rewritten into PYERI-20221013.py
+The results of the programs in (1) and (2) are given in supplement-compt-HeH+.tex in this repository.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+(3) ERI.py (Python program. By this program and symbolic differentiation, you can compute every analytic formula of one and two-electron integrals of GTO required in molecular orbital computations. Obara-Saika recursion scheme is implemented for the computations involving general Cartesian Gaussian functions; but we can do without it, since we can use symbolic differentiation. ) This file is rewritten to PYERI-20221013.py
 
 It is an initial simple lesson for beginners. Nevertheless, I expect that it shall reveal to you the algebraic scheme to execute full computations of quantum chemistry.
  
