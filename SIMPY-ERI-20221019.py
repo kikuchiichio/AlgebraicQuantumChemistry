@@ -124,26 +124,27 @@
 # print(IsFound)  
 # 
 # 
-# <C4> My implementation simply applies every formula to check the computability of the integrals. It would cause a troube.
+# <C4> My implementation simply applies every recursion-formula to check the computability of the integrals.
+#   
 # 
 # For example, let us compute I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,1).
 #  
 # (P1) It is computed by Transfer2 along z-direction, from I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) and I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0).
 # 
-# (P2) II(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) is already prepared at <1>. We request the computation of I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0).
+# (P2) I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) is already prepared at <1>. We request the computation of I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0).
 # 
 # (P3) We compute I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) by Horizontal along z-direction,
-#   from (A) I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0), (B) I(0, 0,0,-1, 0,0,0, 0,0,0, 0,0,0), (C) I(0, 0,0,0, 0,0,0, 0,0,-1, 0,0,0), 
+#        from (A) I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0), (B) I(0, 0,0,-1, 0,0,0, 0,0,0, 0,0,0), (C) I(0, 0,0,0, 0,0,0, 0,0,-1, 0,0,0), 
 #        and (D) I(0, 0,0,1, 0,0,0, 0,0,0)
 #   (A) is already prepared. (B) and (C) are the integrals not defined, and we safely regard them as zero.
 #   We request (D) I(0, 0,0,1, 0,0,0, 0,0,0).
 #   
-# (P4) I(0, 0,0,1, 0,0,0, 0,0,0) is computable by <vertical> along z-direction, 
+# (P4) I(0, 0,0,1, 0,0,0, 0,0,0) is computable by <Vertical> along z-direction, 
 #      from I(0, 0,0,0, 0,0,0, 0,0,0, 0,0,0) and I(1, 0,0,0, 0,0,0, 0,0,0, 0,0,0).
 #      
 # Nevertheless, we might assume another path.
 # 
-# (P3') We try to compute I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) by <vertical> along x-direction.
+# (P3') We try to compute I(0, 0,0,0, 0,0,0, 0,0,1, 0,0,0) by <Vertical> along x-direction.
 #       If we uncarefully apply the formula,
 #       it requests I(0, -1,0,0, 0,0,0, 0,0,1, 0,0,0), 
 #                   I(1, -1,0,0, 0,0,0, 0,0,1, 0,0,0),
