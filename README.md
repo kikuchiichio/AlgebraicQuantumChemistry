@@ -183,18 +183,28 @@ A minor change (PYERI-2022-1028.py) computes the overlap and kinetic integrals b
 2023 March. We are improving the library.
 
 (2003-3-0) SZ-SIM-SP-SINGLEATOM-20230307-V0.py
+
 (2003-3-1) SZ-SIM-SP-SINGLEATOM-20230307-V1.py
 
 These files demonstrate how to compute molecular integrals. 
-The example is the computation for a single atom with 1s, 2s, and 2p orbitals, 
+
+The example is the computation of two-electron repulsion integrals for a single atom with 1s, 2s, and 2p orbitals. 
+
 but it serves to present a model case that shall be applied to polyatomic cases. 
 
 The examples elabolate on the following items.
+
   * How to treat the limit cases where the orbitals coincides in the same positions. 
+
     In such cases, the molecular integrals might show false singularities. 
+    
     We have to remove them to get correct evalations of the integrals.
-    (2003-3-0): We introduce the pseudo-shift (T) in the orbtal positions and then take the limit (T->0).
-    (2003-3-1): We design a custom function (concerning the derivatives of Boys's function) to avoid the false singularity.
-  * How to do efficient substitutions of numeric data to symbolic formulas. 
+    
+    (2003-3-0): We design a custom function (concerning the derivatives of Boys's function) to avoid the false singularity.
+    
+    (2003-3-1): We introduce the pseudo-shift (T) in the orbtal positions and then take the limit (T->0).
+
+* How to do efficient substitutions of numeric data to symbolic formulas. 
+    
     The substitution would take much time, and we have to shorten it. 
 
