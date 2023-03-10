@@ -200,7 +200,7 @@ The examples elabolate on the following items.
     
     We have to remove them to get correct evalations of the integrals.
     
-    (2003-3-0): We design a custom function (concerning the derivatives of Boys's function) to avoid the false singularity.
+    (2003-3-0): We design a custom function (concerning the derivatives of Boys' Fn function) to avoid the false singularity.
     
     (2003-3-1): We introduce the pseudo-shift (T) in the orbtal positions and then take the limit (T->0).
 
