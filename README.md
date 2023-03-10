@@ -207,4 +207,5 @@ The examples elabolate on the following items.
 * How to do efficient substitutions of numeric data to symbolic formulas. 
     
     The substitution would take much time, and we have to shorten it. 
+    In a nutshell, we should reuse any of reusable items, in which the substitution has partially been finished and some variables remain undetermined. 
 
